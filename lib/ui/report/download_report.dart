@@ -169,10 +169,10 @@ class _ReportPageState extends State<ReportPage> {
     ///TODO: DO NOT DELETE  THIS COMMENT
     //Future<String?> downloadFile<T>({
     //     required String url,
-    //     required DateTime startDate,
-    //     required DateTime endDate,
     //     required String fileName,
     //     String? directoryName,
+    //     DateTime? startDate,
+    //     DateTime? endDate,
     //     required BuildContext context,
     //     bool disabledOpenFileButton = false,
     //     bool disabledDeleteFileButton = false,
@@ -185,29 +185,32 @@ class _ReportPageState extends State<ReportPage> {
     //     bool showNotificationWithoutProgress = false,
     //     bool receiveBytesAsMB = false,
     //     Function({required int receivedBytes, required int totalBytes})?
-    //     onReceiveProgress,
+    //         onReceiveProgress,
     //     //required Dio dio,
-    //   }) async {
-    //     final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    //     if (deviceInfo.version.sdkInt < 30) {
-    //       await Permission.storage.request();
-    //       if (!await Permission.storage.isGranted) {
-    //         ScaffoldMessenger.of(context).showSnackBar(
-    //           const SnackBar(
-    //             backgroundColor: Colors.red,
-    //             shape: RoundedRectangleBorder(
-    //               borderRadius: BorderRadius.all(
-    //                 Radius.circular(10),
+    //   })
+    //   async {
+    //     if (Platform.isAndroid) {
+    //       final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    //       if (deviceInfo.version.sdkInt < 30) {
+    //         await Permission.storage.request();
+    //         if (!await Permission.storage.isGranted) {
+    //           ScaffoldMessenger.of(context).showSnackBar(
+    //             const SnackBar(
+    //               backgroundColor: Colors.red,
+    //               shape: RoundedRectangleBorder(
+    //                 borderRadius: BorderRadius.all(
+    //                   Radius.circular(10),
+    //                 ),
     //               ),
+    //               behavior: SnackBarBehavior.floating,
+    //               content: Text('Permission denied to access storage'),
     //             ),
-    //             behavior: SnackBarBehavior.floating,
-    //             content: Text('Permission denied to access storage'),
-    //           ),
-    //         );
-    //         Future.delayed(const Duration(seconds: 2), () {
-    //           openAppSettings();
-    //         });
-    //         return null;
+    //           );
+    //           Future.delayed(const Duration(seconds: 2), () {
+    //             openAppSettings();
+    //           });
+    //           return null;
+    //         }
     //       }
     //     }
     //
@@ -220,18 +223,23 @@ class _ReportPageState extends State<ReportPage> {
     //     _downloadStarted = true;
     //     if (Platform.isAndroid && !saveFileInDataApp) {
     //       downloadDirectory =
-    //       "${await ExternalPath.getExternalStoragePublicDirectory(
-    //           ExternalPath.DIRECTORY_DOWNLOADS)}/";
+    //           "${await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS)}/";
     //     } else {
     //       if (saveFileInDataApp) {
     //         downloadDirectory = "${(await getApplicationSupportDirectory()).path}/";
     //       } else {
     //         downloadDirectory =
-    //         "${(await getApplicationDocumentsDirectory()).path}/";
+    //             "${(await getApplicationDocumentsDirectory()).path}/";
     //       }
     //     }
-    //     if (directoryName != null) {
+    //     if (directoryName != null && Platform.isIOS) {
     //       downloadDirectory = "$downloadDirectory$directoryName/";
+    //     }
+    //     if (Platform.isAndroid && directoryName != null) {
+    //       final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    //       if (deviceInfo.version.sdkInt > 30) {
+    //         downloadDirectory = "$downloadDirectory$directoryName/";
+    //       }
     //     }
     //
     //     if (File(downloadDirectory).existsSync()) {
@@ -260,145 +268,33 @@ class _ReportPageState extends State<ReportPage> {
     //     }
     //     bool showNewNotification = true;
     //     try {
-    //       final response = await _dio.post(
-    //         url,
+    //       await _dio.post(
+    //         url, // The URL
     //         data: {
-    //           "startDate": startDate.toIso8601String(),
-    //           "endDate": endDate.toIso8601String()
+    //           "startDate": startDate?.toIso8601String(), // Match the request payload
+    //           "endDate": endDate?.toIso8601String(),
     //         },
     //         options: Options(
-    //           responseType: ResponseType.bytes,
-    //           // Specify the response type as bytes
-    //           followRedirects: false,
-    //           // Disable redirects for downloading
+    //           responseType: ResponseType.bytes, // For downloading binary data
     //           headers: {
-    //             'accept': '*/*',
-    //             'Content-Type': 'application/json',
+    //             "accept": "*/*", // Header matching curl
+    //             "Content-Type": "application/json", // Header matching curl
     //           },
-    //           // validateStatus: (status) {
-    //           //   return status < 500; // Validate only statuses less than 500
-    //           // },
     //         ),
-    //         onReceiveProgress: (receivedBytes, totalBytes) async {
-    //           // if (receiveBytesAsFileSizeUnit) {
-    //           // receivedBytes = formatBytes(receivedBytes, 2).size;
-    //           // totalBytes = formatBytes(totalBytes, 2).size;
-    //           // }
-    //           if (showNotificationWithoutProgress || Platform.isIOS) {
-    //             if (totalBytes == -1) {
-    //               dev.log('totalBytes == -1');
-    //
-    //               return;
-    //             }
-    //             if (receiveBytesAsMB) {
-    //               return onReceiveProgress?.call(
-    //                   receivedBytes: (receivedBytes / _convertBytesToMB).floor(),
-    //                   totalBytes: (totalBytes / _convertBytesToMB).floor());
-    //             }
-    //             return onReceiveProgress?.call(
-    //                 receivedBytes: receivedBytes, totalBytes: totalBytes);
-    //           }
-    //           if (showNotification && totalBytes != -1) {
-    //             if (showNewNotification) {
-    //               showNewNotification = false;
-    //
-    //               await _showProgressNotification(showDownloadSpeed, totalBytes,
-    //                   receivedBytes, fileName, startTime);
-    //             } else {
-    //               notificationDisplayDate = DateTime.now();
-    //               if (notificationDisplayDate.millisecondsSinceEpoch >
-    //                   endTime.millisecondsSinceEpoch) {
-    //                 //   await AwesomeNotifications().dismiss(1);
-    //                 showNewNotification = true;
-    //                 notificationDisplayDate = endTime;
-    //                 endTime = DateTime.now().add(refreshNotificationProgress);
-    //               }
-    //
-    //               // _showProgressNotification(showDownloadSpeed, totalBytes,
-    //               //     receivedBytes, fileName, startTime);
-    //             }
-    //           }
+    //         onReceiveProgress: (receivedBytes, totalBytes) {
     //           if (totalBytes != -1) {
-    //             if (receiveBytesAsMB) {
-    //               return onReceiveProgress?.call(
-    //                   receivedBytes: (receivedBytes / _convertBytesToMB).floor(),
-    //                   totalBytes: (totalBytes / _convertBytesToMB).floor());
-    //             }
-    //             return onReceiveProgress?.call(
-    //                 receivedBytes: receivedBytes, totalBytes: totalBytes);
-    //           } else {
-    //             dev.log('totalBytes == -1');
+    //             print("totalBytes != -1");
     //           }
     //         },
-    //       );
-    //       print(response);
-    //       String filePath = solvePath ?? "$downloadDirectory$fileName";
+    //       ).then((response) async {
+    //         final filePath = solvePath ?? "$downloadDirectory$fileName";
+    //         final file = File(filePath);
+    //         await file.writeAsBytes(response.data); // Save response bytes to the file
+    //         dev.log('File downloaded successfully at $filePath');
+    //       }).catchError((error) {
+    //         dev.log('Download error: $error'); // Log errors for debugging
+    //       });
     //
-    //       File file = File(filePath);
-    //       await file.writeAsBytes(response.data);
-    //       String contents = file.readAsStringSync();
-    //       print(contents);
-    //
-    //
-    //       // await _dio.download(
-    //       //   url,
-    //       //   solvePath ?? "$downloadDirectory$fileName",
-    //       //   options: Options(
-    //       //     responseType: ResponseType.bytes,
-    //       //     followRedirects: false,
-    //       //   ),
-    //       //   onReceiveProgress: (receivedBytes, totalBytes) async {
-    //       //     // if (receiveBytesAsFileSizeUnit) {
-    //       //     // receivedBytes = formatBytes(receivedBytes, 2).size;
-    //       //     // totalBytes = formatBytes(totalBytes, 2).size;
-    //       //     // }
-    //       //     if (showNotificationWithoutProgress || Platform.isIOS) {
-    //       //       if (totalBytes == -1) {
-    //       //         dev.log('totalBytes == -1');
-    //       //
-    //       //         return;
-    //       //       }
-    //       //       if (receiveBytesAsMB) {
-    //       //         return onReceiveProgress?.call(
-    //       //             receivedBytes: (receivedBytes / _convertBytesToMB).floor(),
-    //       //             totalBytes: (totalBytes / _convertBytesToMB).floor());
-    //       //       }
-    //       //       return onReceiveProgress?.call(
-    //       //           receivedBytes: receivedBytes, totalBytes: totalBytes);
-    //       //     }
-    //       //     if (showNotification && totalBytes != -1) {
-    //       //       if (showNewNotification) {
-    //       //         showNewNotification = false;
-    //       //
-    //       //         await _showProgressNotification(showDownloadSpeed, totalBytes,
-    //       //             receivedBytes, fileName, startTime);
-    //       //       } else {
-    //       //         notificationDisplayDate = DateTime.now();
-    //       //         if (notificationDisplayDate.millisecondsSinceEpoch >
-    //       //             endTime.millisecondsSinceEpoch) {
-    //       //           //   await AwesomeNotifications().dismiss(1);
-    //       //           showNewNotification = true;
-    //       //           notificationDisplayDate = endTime;
-    //       //           endTime = DateTime.now().add(refreshNotificationProgress);
-    //       //         }
-    //       //
-    //       //         // _showProgressNotification(showDownloadSpeed, totalBytes,
-    //       //         //     receivedBytes, fileName, startTime);
-    //       //       }
-    //       //     }
-    //       //     if (totalBytes != -1) {
-    //       //       if (receiveBytesAsMB) {
-    //       //         return onReceiveProgress?.call(
-    //       //             receivedBytes: (receivedBytes / _convertBytesToMB).floor(),
-    //       //             totalBytes: (totalBytes / _convertBytesToMB).floor());
-    //       //       }
-    //       //       return onReceiveProgress?.call(
-    //       //           receivedBytes: receivedBytes, totalBytes: totalBytes);
-    //       //     } else {
-    //       //       dev.log('totalBytes == -1');
-    //       //     }
-    //       //   },
-    //       // );
     //
     //       if (showNotification) {
     //         await AwesomeNotifications().dismiss(1);
@@ -406,26 +302,26 @@ class _ReportPageState extends State<ReportPage> {
     //           actionButtons: hideButtons
     //               ? null
     //               : [
-    //             NotificationActionButton(
-    //               enabled: !disabledOpenFileButton,
-    //               color: Colors.green.shade900,
-    //               key: "tbib_downloader_open_file",
-    //               label: "Open File",
-    //             ),
-    //             NotificationActionButton(
-    //               enabled: !disabledDeleteFileButton,
-    //               key: "tbib_downloader_delete_file",
-    //               isDangerousOption: true,
-    //               color: Colors.red.shade900,
-    //               label: "Delete File",
-    //             ),
-    //             NotificationActionButton(
-    //               enabled: !disabledShareFileButton,
-    //               key: "tbib_downloader_share_file",
-    //               color: Colors.green.shade900,
-    //               label: "Share File",
-    //             ),
-    //           ],
+    //                   NotificationActionButton(
+    //                     enabled: !disabledOpenFileButton,
+    //                     color: Colors.green.shade900,
+    //                     key: "tbib_downloader_open_file",
+    //                     label: "Open File",
+    //                   ),
+    //                   NotificationActionButton(
+    //                     enabled: !disabledDeleteFileButton,
+    //                     key: "tbib_downloader_delete_file",
+    //                     isDangerousOption: true,
+    //                     color: Colors.red.shade900,
+    //                     label: "Delete File",
+    //                   ),
+    //                   NotificationActionButton(
+    //                     enabled: !disabledShareFileButton,
+    //                     key: "tbib_downloader_share_file",
+    //                     color: Colors.green.shade900,
+    //                     label: "Share File",
+    //                   ),
+    //                 ],
     //           content: NotificationContent(
     //             id: 1,
     //             channelKey: 'download_completed_channel',
@@ -444,7 +340,6 @@ class _ReportPageState extends State<ReportPage> {
     //       dev.log('download error: $e');
     //     }
     //     _downloadStarted = false;
-    //
     //
     //     return solvePath ?? "$downloadDirectory$fileName";
     //   }
@@ -465,8 +360,8 @@ class _ReportPageState extends State<ReportPage> {
         });
       },
       //todo:startDate and endDate
-      // startDate: startDate,
-      // endDate: endDate,
+      startDate: startDate,
+      endDate: endDate,
       // saveFileInDataApp: true,
       // directoryName: 'test',
       // onReceiveProgress: ({int? count, int? total}) => debugPrint(
