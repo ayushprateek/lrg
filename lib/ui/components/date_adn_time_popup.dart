@@ -13,8 +13,8 @@ Future<DateTime?> getDateAndTimePopup(
           primarySwatch: Colors.grey,
           splashColor: Colors.black,
           textTheme: const TextTheme(
-            subtitle1: TextStyle(color: Colors.black),
-            button: TextStyle(color: Colors.black),
+            // subtitle1: TextStyle(color: Colors.black),
+            // button: TextStyle(color: Colors.black),
           ),
           // accentColor: Colors.black,
           colorScheme: ColorScheme.light(

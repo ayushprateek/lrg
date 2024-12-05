@@ -145,7 +145,7 @@ Text textLabelCenterAligned(
 InputDecoration textFieldDecoration({IconData? icon, String? text}) {
   return InputDecoration(
     labelStyle:
-        AppTheme.textTheme.headline5?.merge(const TextStyle(color: appPrimary)),
+        AppTheme.textTheme.headlineMedium?.merge(const TextStyle(color: appPrimary)),
     labelText: text,
     prefixIcon: Icon(icon, color: Colors.black),
     enabledBorder: UnderlineInputBorder(

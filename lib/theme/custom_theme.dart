@@ -14,7 +14,7 @@ class AppTheme {
         shadowColor: Colors.black,
         brightness: Brightness.dark,
         canvasColor: Colors.black,
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
         dialogBackgroundColor: Colors.black,
         scaffoldBackgroundColor: Colors.black,
         primaryColor: Colors.white,
@@ -22,25 +22,25 @@ class AppTheme {
         primaryColorDark: ThemeColors.primary[700],
         secondaryHeaderColor: ThemeColors.darkGrey[700],
         indicatorColor: appPrimary,
-        toggleableActiveColor: appPrimary,
-        errorColor: red,
+        // toggleableActiveColor: appPrimary,
+        // errorColor: red,
         hintColor: appPrimary,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         dividerColor: ThemeColors.grey[400],
         disabledColor: ThemeColors.darkGrey[300],
-        bottomAppBarColor: ThemeColors.darkGrey[800],
+        // bottomAppBarColor: ThemeColors.darkGrey[800],
         cardColor: ThemeColors.darkGrey[800],
         focusColor: Colors.white.withOpacity(0.12),
         hoverColor: Colors.white.withOpacity(0.04),
-        selectedRowColor: ThemeColors.darkGrey[100],
+        // selectedRowColor: ThemeColors.darkGrey[100],
         unselectedWidgetColor: Colors.white70,
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(appPrimary),
-          shape:
+              backgroundColor: MaterialStateProperty.all(appPrimary),
+              shape:
               MaterialStateProperty.all<OutlinedBorder>(const StadiumBorder()),
-        )),
+            )),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: ThemeColors.primary)
             .copyWith(secondary: appPrimary));
   }
@@ -55,7 +55,18 @@ class AppTheme {
         shadowColor: Colors.white,
         brightness: Brightness.light,
         canvasColor: Colors.white,
-        backgroundColor: ThemeColors.primary,
+        appBarTheme:const  AppBarTheme(
+            backgroundColor: appPrimary,
+            iconTheme: IconThemeData(
+              color: Colors.white, //change your color here
+            ),
+            titleTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600
+            )
+        ),
+        // backgroundColor: ThemeColors.primary,
         dialogBackgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
         primaryColor: ThemeColors.primary,
@@ -63,61 +74,61 @@ class AppTheme {
         primaryColorDark: ThemeColors.primary[700],
         secondaryHeaderColor: ThemeColors.primary[50],
         indicatorColor: appPrimary,
-        toggleableActiveColor: black,
-        errorColor: ThemeColors.hint,
+        // toggleableActiveColor: black,
+        // errorColor: ThemeColors.hint,
         hintColor: ThemeColors.hint,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         dividerColor: ThemeColors.lightGrey[200],
         disabledColor: ThemeColors.lightGrey[500],
-        bottomAppBarColor: Colors.white,
+        // bottomAppBarColor: Colors.white,
         cardColor: Colors.white,
         focusColor: Colors.black.withOpacity(0.12),
         hoverColor: Colors.black.withOpacity(0.04),
-        selectedRowColor: ThemeColors.grey[100],
+        // selectedRowColor: ThemeColors.grey[100],
         unselectedWidgetColor: black,
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(black),
-          shape:
+              backgroundColor: MaterialStateProperty.all(black),
+              shape:
               MaterialStateProperty.all<OutlinedBorder>(const StadiumBorder()),
-        )),
+            )),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: ThemeColors.primary)
             .copyWith(secondary: appPrimary));
   }
 
   static TextTheme textTheme = const TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
         fontSize: 96.0, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
         fontSize: 60.0, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-    headline3: TextStyle(
+    displaySmall: TextStyle(
         fontSize: 48.0, fontWeight: FontWeight.normal, letterSpacing: 0.0),
-    headline4: TextStyle(
+    headlineLarge: TextStyle(
         fontSize: 34.0, fontWeight: FontWeight.normal, letterSpacing: 0.25),
-    headline5: TextStyle(
+    headlineMedium: TextStyle(
         fontSize: 24.0, fontWeight: FontWeight.normal, letterSpacing: 0.0),
-    headline6: TextStyle(
+    headlineSmall: TextStyle(
         fontSize: 20.0, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-    subtitle1: TextStyle(
+    titleLarge: TextStyle(
         fontSize: 16.0, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-    subtitle2: TextStyle(
+    titleMedium: TextStyle(
         fontSize: 14.0, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-    bodyText1: TextStyle(
+    titleSmall: TextStyle(
         fontSize: 16.0, fontWeight: FontWeight.normal, letterSpacing: 0.5),
-    bodyText2: TextStyle(
+    bodyLarge: TextStyle(
         fontSize: 14.0, fontWeight: FontWeight.normal, letterSpacing: 0.25),
-    button: TextStyle(
+    bodyMedium: TextStyle(
         fontSize: 18.0,
         fontFamily: 'OpensansHebrew',
         fontWeight: FontWeight.w400,
         letterSpacing: 1.0),
-    caption: TextStyle(
+    bodySmall: TextStyle(
         fontSize: 12.0,
         fontFamily: 'OpensansHebrew',
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4),
-    overline: TextStyle(
+    labelLarge: TextStyle(
         fontSize: 10.0,
         fontFamily: 'OpensansHebrew',
         fontWeight: FontWeight.w400,
@@ -224,3 +235,4 @@ class ThemeColors {
     },
   );
 }
+

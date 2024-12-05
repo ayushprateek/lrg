@@ -133,10 +133,10 @@ void showDialogConfirmationCustomButton(
 
 Text _dialogTitle(BuildContext context, String? title, bool isSuccess) {
   TextStyle? titleTextStyle = isSuccess
-      ? AppTheme.textTheme.headline6
-          ?.merge(TextStyle(color: Theme.of(context).colorScheme.secondary))
-      : AppTheme.textTheme.headline6
-          ?.merge(TextStyle(color: Theme.of(context).errorColor));
+      ? AppTheme.textTheme.headlineSmall
+      ?.merge(TextStyle(color: Theme.of(context).colorScheme.secondary))
+      : AppTheme.textTheme.headlineSmall
+      ?.merge(TextStyle(color: Colors.red));
   if (title != null) {
     return Text("  " + title, style: titleTextStyle);
   } else {

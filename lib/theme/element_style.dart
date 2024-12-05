@@ -3,24 +3,25 @@ import 'package:miesp/theme/custom_font.dart';
 import 'package:miesp/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 
+
 TextStyle textLabelStyle() {
-  return AppTheme.textTheme.bodyText1 ?? const TextStyle();
+  return AppTheme.textTheme.titleSmall ?? const TextStyle();
 }
 
 TextStyle? textCaptionStyle() {
-  return AppTheme.textTheme.bodyText2
+  return AppTheme.textTheme.bodyLarge
       ?.merge(const TextStyle(color: Colors.white));
 }
 
 TextStyle? textLabelStyleForPurpleColor(Color color) {
-  return AppTheme.textTheme.bodyText2?.merge(TextStyle(
+  return AppTheme.textTheme.bodyLarge?.merge(TextStyle(
     color: color,
   ));
 }
 
 TextStyle? textLabelBoldStyle(double size, Color color,
     {double letterSpacing = 0.3}) {
-  return AppTheme.textTheme.bodyText1?.merge(TextStyle(
+  return AppTheme.textTheme.titleSmall?.merge(TextStyle(
       fontWeight: FontWeight.w700,
       fontSize: size,
       letterSpacing: letterSpacing,
@@ -28,7 +29,7 @@ TextStyle? textLabelBoldStyle(double size, Color color,
 }
 
 TextStyle? textLabelStyleForEditText({double size = 16}) {
-  return AppTheme.textTheme.headline6?.merge(TextStyle(
+  return AppTheme.textTheme.headlineSmall?.merge(TextStyle(
     color: black,
     fontSize: size,
     fontWeight: FontWeight.w400,
@@ -36,16 +37,16 @@ TextStyle? textLabelStyleForEditText({double size = 16}) {
 }
 
 TextStyle? textLabelBoldStyleWithCustomSize(
-  double size,
-  Color color, {
-  double letterSpacing = 0,
-  double height = 1.0,
-  String fontFamily = CustomFont.customFont,
-  FontWeight fontWeight = FontWeightSize.medium,
-  TextDecoration? decoration,
-}) {
-  return AppTheme.textTheme.bodyText1?.merge(
-      // AppTheme.textTheme.bodyMedium
+    double size,
+    Color color, {
+      double letterSpacing = 0,
+      double height = 1.0,
+      String fontFamily = CustomFont.customFont,
+      FontWeight fontWeight = FontWeightSize.medium,
+      TextDecoration? decoration,
+    }) {
+  return AppTheme.textTheme.titleSmall?.merge(
+    // AppTheme.textTheme.bodyMedium
       TextStyle(
           fontFamily: fontFamily,
           fontWeight: fontWeight,
@@ -56,10 +57,10 @@ TextStyle? textLabelBoldStyleWithCustomSize(
 
 TextStyle? textLabelRegularStyle(double size, Color color,
     {double letterSpacing = 0.3,
-    String fontFamily = CustomFont.customFont,
-    FontWeight fontWeight = FontWeightSize.regular,
-    TextDecoration? decoration}) {
-  return AppTheme.textTheme.bodyText1?.merge(TextStyle(
+      String fontFamily = CustomFont.customFont,
+      FontWeight fontWeight = FontWeightSize.regular,
+      TextDecoration? decoration}) {
+  return AppTheme.textTheme.titleSmall?.merge(TextStyle(
       fontFamily: fontFamily,
       fontWeight: fontWeight,
       fontSize: size,
@@ -69,14 +70,14 @@ TextStyle? textLabelRegularStyle(double size, Color color,
 }
 
 TextStyle? textLabelStyleWithCustomSize(
-  double size,
-  Color color, {
-  double letterSpacing = 0.0,
-  double height = 1.0,
-  String fontFamily = CustomFont.customFont,
-  FontWeight fontWeight = FontWeightSize.medium,
-}) {
-  return AppTheme.textTheme.bodyText1?.merge(TextStyle(
+    double size,
+    Color color, {
+      double letterSpacing = 0.0,
+      double height = 1.0,
+      String fontFamily = CustomFont.customFont,
+      FontWeight fontWeight = FontWeightSize.medium,
+    }) {
+  return AppTheme.textTheme.titleSmall?.merge(TextStyle(
     fontSize: size,
     letterSpacing: letterSpacing,
     color: color,
@@ -87,14 +88,14 @@ TextStyle? textLabelStyleWithCustomSize(
 }
 
 TextStyle? textLabelRegularStyleWithUnderLine(
-  double size,
-  Color color, {
-  double letterSpacing = 0.0,
-  double height = 1.0,
-  String fontFamily = CustomFont.customFont,
-  FontWeight fontWeight = FontWeightSize.medium,
-}) {
-  return AppTheme.textTheme.bodyText1?.merge(TextStyle(
+    double size,
+    Color color, {
+      double letterSpacing = 0.0,
+      double height = 1.0,
+      String fontFamily = CustomFont.customFont,
+      FontWeight fontWeight = FontWeightSize.medium,
+    }) {
+  return AppTheme.textTheme.titleSmall?.merge(TextStyle(
     fontSize: size,
     letterSpacing: letterSpacing,
     color: color,
