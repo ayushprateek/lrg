@@ -39,10 +39,10 @@ class MyNotificationService {
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
     if (receivedAction.buttonKeyPressed == 'tbib_downloader_open_file') {
-      var res = await TBIBDownloaderOpenFile()
+      await TBIBDownloaderOpenFile()
           .openFile(path: receivedAction.payload!['path']!);
 
-      log(res.message);
+      // log(res);
     } else if (receivedAction.buttonKeyPressed ==
         'tbib_downloader_delete_file') {
       await TBIBDownloaderOpenFile()
@@ -463,8 +463,10 @@ class _ReportPageState extends State<ReportPage> {
         setState(() {
           progress = (receivedBytes! / totalBytes!);
         });
-      }, startDate: startDate,
-      endDate: endDate,
+      },
+      //todo:startDate and endDate
+      // startDate: startDate,
+      // endDate: endDate,
       // saveFileInDataApp: true,
       // directoryName: 'test',
       // onReceiveProgress: ({int? count, int? total}) => debugPrint(

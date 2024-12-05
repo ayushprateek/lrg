@@ -39,7 +39,7 @@ class _CustomScannerState extends State<CustomScanner> {
   //
   //   if (!mounted) return;
   //   barCode = scanResult;
-  //   if (barCode != '-1') {
+  //   if (barCode != '') {
   //     if (await ServiceManager.isInternetAvailable()) {
   //       ServiceManager.getItemDetails(
   //           barCode: barCode, onSuccess: onSuccess, onError: onError);
@@ -102,7 +102,7 @@ class _CustomScannerState extends State<CustomScanner> {
                           scanQRCode(onSuccess: (String scanResult) async {
                             if (!mounted) return;
                             barCode = scanResult;
-                            if (barCode != '-1') {
+                            if (barCode != '') {
                               if (await ServiceManager.isInternetAvailable()) {
                                 ServiceManager.getItemDetails(
                                     barCode: barCode,
