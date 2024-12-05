@@ -17,6 +17,7 @@ Future<void> scanQRCode({
     // );
     Get.to(() => BarcodeScannerSimple(
           barCodeScanResult: (String? res) {
+            Get.back();
             onSuccess(res ?? '');
           },
         ));
@@ -26,9 +27,9 @@ Future<void> scanQRCode({
     return;
   }
 
-  if (scanResult != '') {
-    onSuccess(scanResult);
-  }
+  // if (scanResult != '') {
+  //   onSuccess(scanResult);
+  // }
 }
 
 class BarcodeScannerSimple extends StatefulWidget {
@@ -42,6 +43,7 @@ class BarcodeScannerSimple extends StatefulWidget {
 
 class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   // Barcode? _barcode;
+  bool _scanned=false;
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
@@ -60,13 +62,16 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   }
 
   void _handleBarcode(BarcodeCapture barcodes) {
-    if (mounted) {
+    if (mounted &&!_scanned) {
+      _scanned=true;
       widget.barCodeScanResult(barcodes.barcodes.firstOrNull?.displayValue);
+
 
       // setState(() {
       //   _barcode = barcodes.barcodes.firstOrNull;
       // });
     }
+
   }
 
   @override

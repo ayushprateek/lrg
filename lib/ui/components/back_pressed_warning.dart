@@ -16,11 +16,12 @@ String? text}) {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Container(
-            height: MediaQuery.of(context).size.height / 20,
+            height: MediaQuery.of(context).size.height / 18,
             width: MediaQuery.of(context).size.width / 1.5,
             child: Text(
               text??"Are you sure you want to go back?",
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,
+              fontSize: 16),
             ),
           ),
           actions: [

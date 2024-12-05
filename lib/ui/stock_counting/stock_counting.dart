@@ -357,7 +357,7 @@ class _StockCountingState extends State<StockCounting> {
                                                         Get.back();
                                                       },
                                                       text:
-                                                          'Are you sure yoju want to delete ${stockCountingDetail.varItemNo}?',
+                                                          'Are you sure you want to delete ${stockCountingDetail.varItemNo}?',
                                                     );
                                                   },
                                                   child: Row(
@@ -478,6 +478,8 @@ class _StockCountingState extends State<StockCounting> {
 
   onSuccess(StockCountingDetailModel countingDetailModel) {
     print(countingDetailModel.toJson());
+    _code.clear();
+    _rackNo.clear();
     countingDetailModel.quantity.text =
         countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
     if (countingDetailModel.varUomName == null ||
