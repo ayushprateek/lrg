@@ -16,6 +16,7 @@ class StockCountRequestModel {
   String? varRackNo;
   String? varDeviceNo;
   String? varBarcode;
+  String? varItemDescription;
 
   StockCountRequestModel({
     this.varItemNo,
@@ -27,6 +28,7 @@ class StockCountRequestModel {
     this.varRackNo,
     this.varDeviceNo,
     this.varBarcode,
+    this.varItemDescription,
   });
 
   factory StockCountRequestModel.fromJson(Map<String, dynamic> json) =>
@@ -40,6 +42,7 @@ class StockCountRequestModel {
         varRackNo: json["varRackNo"],
         varDeviceNo: json["varDeviceNo"],
         varBarcode: json["varBarcode"],
+        varItemDescription: json["varItemDescription"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +55,6 @@ class StockCountRequestModel {
         "varRackNo": varRackNo,
         "varDeviceNo": varDeviceNo,
         "varBarcode": varBarcode,
+        "varItemDescription": varItemDescription,
       };
 }

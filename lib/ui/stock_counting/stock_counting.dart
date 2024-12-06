@@ -540,6 +540,7 @@ class _StockCountingState extends State<StockCounting> {
         requestList.add(StockCountRequestModel(
           bigintUserId: customerModel.userId,
           decInStock: stockCountingDetailModel.decInStock,
+          varItemDescription: stockCountingDetailModel.varItemDescription,
           decQuantity: qty ?? stockCountingDetailModel.decQuantity,
           varDeviceNo: _deviceNumber.text,
           varItemNo: stockCountingDetailModel.varItemNo,
