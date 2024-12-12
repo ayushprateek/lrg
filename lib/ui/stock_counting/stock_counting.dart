@@ -481,6 +481,9 @@ class _StockCountingState extends State<StockCounting> {
     _code.clear();
     countingDetailModel.quantity.text =
         countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
+    if (countingDetailModel.quantity.text == '0.00') {
+      countingDetailModel.quantity.clear();
+    }
     if (countingDetailModel.varUomName == null ||
         countingDetailModel.varUomName == '' ||
         countingDetailModel.varUomName == 'null') {
