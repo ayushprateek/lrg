@@ -555,10 +555,10 @@ class _StockCountingState extends State<StockCounting> {
       if (await ServiceManager.isInternetAvailable()) {
         ServiceManager.saveStockCounting(
             requestList: requestList,
-            onSuccess: () {
+            onSuccess: (Map map) {
               items.clear();
               _rackNo.clear();
-              getSuccessSnackBar('Your data is saved');
+              getSuccessSnackBar(map['message']??'Your data is saved');
               setState(() {});
             },
             onError: (String error) {

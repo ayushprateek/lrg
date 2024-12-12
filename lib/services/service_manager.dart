@@ -126,7 +126,7 @@ class ServiceManager {
     );
     print(res.body);
     if (res.statusCode == 200) {
-      onSuccess();
+      onSuccess(jsonDecode(res.body));
     } else {
       onError(res.body);
     }
