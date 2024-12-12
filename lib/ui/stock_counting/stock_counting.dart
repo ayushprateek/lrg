@@ -79,7 +79,7 @@ class _StockCountingState extends State<StockCounting> {
                       const SizedBox(
                         height: 30,
                       ),
-                      getDisabledTextField(
+                      getTextField(
                           controller: _deviceNumber,
                           labelText: 'Device Number'),
                       getTextField(
@@ -479,7 +479,6 @@ class _StockCountingState extends State<StockCounting> {
   onSuccess(StockCountingDetailModel countingDetailModel) {
     print(countingDetailModel.toJson());
     _code.clear();
-    _rackNo.clear();
     countingDetailModel.quantity.text =
         countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
     if (countingDetailModel.varUomName == null ||
