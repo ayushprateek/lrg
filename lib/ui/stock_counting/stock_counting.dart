@@ -28,16 +28,19 @@ class _StockCountingState extends State<StockCounting> {
   final TextEditingController _deviceNumber = TextEditingController();
   final TextEditingController _rackNo = TextEditingController();
   final TextEditingController _code = TextEditingController();
+  final TextEditingController _UOM = TextEditingController();
+  final TextEditingController _description = TextEditingController();
   final FocusNode _codeFocusNode = FocusNode();
+  final FocusNode _qtyFocusNode = FocusNode();
 
   final TextEditingController _qty = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<UomModel> uomList = [];
   UomModel? selectedUOM;
-  bool displayQtyField=false;
+  bool displayQtyField = false;
 
   // List<StockCountingDetailModel> items = [];
-  String selectedOption = 'Scan';
+  String selectedOption = 'Manual';
   Set<String> optionList = {'Scan', 'Manual'};
 
   @override
@@ -91,12 +94,42 @@ class _StockCountingState extends State<StockCounting> {
                           labelText: 'Device Number'),
                       getTextField(
                           controller: _rackNo, labelText: 'Rack Number'),
-                      if (selectedOption == 'Manual')
-                        getTextField(controller: _code, focusNode: _codeFocusNode,labelText: 'Item Code',autofocus: true),
-                      if(displayQtyField)
-                      getTextField(controller: _qty, labelText: 'Qty'),
-                      _uomDropdownButton(),
-                      _dropdownButton(),
+
+                      if (selectedOption == 'Manual' && !displayQtyField)
+                        getTextField(
+                            controller: _code,
+                            focusNode: _codeFocusNode,
+                            labelText: 'Item Code',
+                            autofocus: true),
+
+                      if (selectedOption == 'Manual' && displayQtyField)
+                        getDisabledTextField(
+                            controller: _code,
+                            focusNode: _codeFocusNode,
+                            labelText: 'Item Code',
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  _code.clear();
+                                  _description.clear();
+                                  _qty.clear();
+                                  setState(() {
+                                    displayQtyField = false;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Colors.red,
+                                )),
+                            autofocus: true),
+                      if (displayQtyField) ...[
+                        getDisabledTextField(
+                            controller: _description, labelText: 'Description'),
+                        getTextField(controller: _qty, labelText: 'Qty',focusNode: _qtyFocusNode),
+                        getDisabledTextField(
+                            controller: _UOM, labelText: 'UOM'),
+                      ],
+                      // _uomDropdownButton(),
+                      // _dropdownButton(),
                       Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
@@ -106,7 +139,7 @@ class _StockCountingState extends State<StockCounting> {
                             height: Get.height / 18,
                             child: loadingButton(
                                 isLoading: false,
-                                btnText: displayQtyField?'Submit':'Find',
+                                btnText: displayQtyField ? 'Submit' : 'Find',
                                 fontSize: 16,
                                 elevation: 4,
                                 onPress: () async {
@@ -425,8 +458,8 @@ class _StockCountingState extends State<StockCounting> {
   }
 
   getInfo() async {
-    await ServiceManager.getUOMList(
-        onSuccess: onUOMSuccess, onError: onUOMError);
+    // await ServiceManager.getUOMList(
+    //     onSuccess: onUOMSuccess, onError: onUOMError);
     _deviceNumber.text = (await getDeviceId()) ?? '';
     setState(() {});
   }
@@ -447,10 +480,14 @@ class _StockCountingState extends State<StockCounting> {
     ///if quantity is not entered by user then set the qty and return
     if (_qty.text.isEmpty || (int.tryParse(_qty.text) ?? 0) == 0) {
       _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '0';
+      _description.text = countingDetailModel.varItemDescription ?? '';
+
+      _UOM.text = countingDetailModel.varUomCode ?? '';
       CustomSnackBar.successSnackBar('Please enter the qty');
       setState(() {
-        displayQtyField=true;
+        displayQtyField = true;
       });
+      FocusScope.of(context).requestFocus(_qtyFocusNode);
       return;
     }
     // print("Quantity ${countingDetailModel.decQuantity?.toStringAsFixed(2)}");
@@ -520,7 +557,7 @@ class _StockCountingState extends State<StockCounting> {
         varItemNo: stockCountingDetailModel.varItemNo,
         varRackNo: _rackNo.text,
         varBarcode: stockCountingDetailModel.varBarcode,
-        varUomCode: selectedUOM?.varUomCode,
+        varUomCode: _UOM.text,
         varWarehouseCode: stockCountingDetailModel.varWarehouseCode,
       ));
 
@@ -529,10 +566,10 @@ class _StockCountingState extends State<StockCounting> {
             requestList: requestList,
             onSuccess: (Map map) {
               _code.clear();
-              _rackNo.clear();
               _qty.clear();
-              displayQtyField=false;
-
+              _description.clear();
+              _UOM.clear();
+              displayQtyField = false;
               getSuccessSnackBar(map['message'] ?? 'Your data is saved');
               setState(() {});
               FocusScope.of(context).requestFocus(_codeFocusNode);

@@ -17,10 +17,11 @@ import 'package:url_launcher/url_launcher.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class ServiceManager {
-  static String baseURL = 'http://51.79.229.83:8080/API/';
+  ///DEVELOPMENT URL
+  // static String baseURL = 'http://51.79.229.83:8080/API/';
 
-  ///DEVELOPMENT
-  // static String baseURL = 'http://51.79.229.83:8080/Live/API/';///LIVE
+  ///PRODUCTION URL
+  static String baseURL = 'http://51.79.229.83:8080/Live/API/';///LIVE
   static Map<String, String>? header = {
     'accept': '*/*',
     'Content-Type': 'application/json'
