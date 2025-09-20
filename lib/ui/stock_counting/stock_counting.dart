@@ -28,7 +28,8 @@ class _StockCountingState extends State<StockCounting> {
   final TextEditingController _deviceNumber = TextEditingController();
   final TextEditingController _rackNo = TextEditingController();
   final TextEditingController _code = TextEditingController();
-  final TextEditingController _UOM = TextEditingController();
+
+  // final TextEditingController _UOM = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final FocusNode _codeFocusNode = FocusNode();
   final FocusNode _qtyFocusNode = FocusNode();
@@ -112,6 +113,7 @@ class _StockCountingState extends State<StockCounting> {
                                   _code.clear();
                                   _description.clear();
                                   _qty.clear();
+                                  selectedUOM=null;
                                   setState(() {
                                     displayQtyField = false;
                                   });
@@ -124,11 +126,15 @@ class _StockCountingState extends State<StockCounting> {
                       if (displayQtyField) ...[
                         getDisabledTextField(
                             controller: _description, labelText: 'Description'),
-                        getTextField(controller: _qty, labelText: 'Qty',focusNode: _qtyFocusNode),
-                        getDisabledTextField(
-                            controller: _UOM, labelText: 'UOM'),
+                        getTextField(
+                            controller: _qty,
+                            labelText: 'Qty',
+                            focusNode: _qtyFocusNode),
+                        if (uomList.isNotEmpty) _uomDropdownButton(),
+                        // getDisabledTextField(
+                        //     controller: _UOM, labelText: 'UOM'),
                       ],
-                      // _uomDropdownButton(),
+
                       // _dropdownButton(),
                       Align(
                         alignment: Alignment.centerRight,
@@ -481,8 +487,15 @@ class _StockCountingState extends State<StockCounting> {
     if (_qty.text.isEmpty || (int.tryParse(_qty.text) ?? 0) == 0) {
       _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '0';
       _description.text = countingDetailModel.varItemDescription ?? '';
-
-      _UOM.text = countingDetailModel.varUomCode ?? '';
+      uomList = countingDetailModel.uomList ?? [];
+      for (UomModel uomModel in uomList) {
+        if (uomModel.varUomCode == countingDetailModel.varUomCode) {
+          selectedUOM = uomModel;
+        }
+      }
+      if (selectedUOM == null && uomList.isNotEmpty) {
+        selectedUOM = uomList[0];
+      }
       CustomSnackBar.successSnackBar('Please enter the qty');
       setState(() {
         displayQtyField = true;
@@ -493,6 +506,8 @@ class _StockCountingState extends State<StockCounting> {
     // print("Quantity ${countingDetailModel.decQuantity?.toStringAsFixed(2)}");
     // countingDetailModel.quantity.text = countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
     countingDetailModel.quantity.text = _qty.text;
+    countingDetailModel.varUomCode = selectedUOM?.varUomCode;
+    countingDetailModel.varUomName = selectedUOM?.varUomName;
     if (countingDetailModel.quantity.text == '0.00') {
       countingDetailModel.quantity.clear();
     }
@@ -557,7 +572,7 @@ class _StockCountingState extends State<StockCounting> {
         varItemNo: stockCountingDetailModel.varItemNo,
         varRackNo: _rackNo.text,
         varBarcode: stockCountingDetailModel.varBarcode,
-        varUomCode: _UOM.text,
+        varUomCode: selectedUOM?.varUomCode,
         varWarehouseCode: stockCountingDetailModel.varWarehouseCode,
       ));
 
@@ -568,7 +583,7 @@ class _StockCountingState extends State<StockCounting> {
               _code.clear();
               _qty.clear();
               _description.clear();
-              _UOM.clear();
+              selectedUOM = null;
               displayQtyField = false;
               getSuccessSnackBar(map['message'] ?? 'Your data is saved');
               setState(() {});
