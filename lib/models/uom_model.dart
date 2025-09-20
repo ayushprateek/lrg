@@ -18,14 +18,19 @@ class UomModel {
   });
 
   factory UomModel.fromJson(Map<String, dynamic> json) => UomModel(
-        bigintUomId: int.tryParse(json["bigintUOMId"].toString()),
-        varUomCode: json["varUOMCode"],
-        varUomName: json["varUOMName"],
-      );
+    bigintUomId: int.tryParse(json["bigintUOMId"].toString()),
+    varUomCode: json["varUOMCode"],
+    varUomName: json["varUOMName"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "bigintUOMId": bigintUomId,
-        "varUOMCode": varUomCode,
-        "varUOMName": varUomName,
-      };
+    "bigintUOMId": bigintUomId,
+    "varUOMCode": varUomCode,
+    "varUOMName": varUomName,
+  };
+
+  @override
+  String toString() {
+    return varUomName ?? ''; // For displaying in Dropdown
+  }
 }

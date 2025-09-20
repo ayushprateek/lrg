@@ -28,8 +28,12 @@ class _StockCountingState extends State<StockCounting> {
   final TextEditingController _deviceNumber = TextEditingController();
   final TextEditingController _rackNo = TextEditingController();
   final TextEditingController _code = TextEditingController();
+  final TextEditingController _qty = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  List<StockCountingDetailModel> items = [];
+  List<UomModel> uomList = [];
+  UomModel? selectedUOM;
+
+  // List<StockCountingDetailModel> items = [];
   String selectedOption = 'Scan';
   Set<String> optionList = {'Scan', 'Manual'};
 
@@ -40,7 +44,7 @@ class _StockCountingState extends State<StockCounting> {
   }
 
   _onBackButtonPressed() {
-    if (_rackNo.text.isNotEmpty || items.isNotEmpty) {
+    if (_rackNo.text.isNotEmpty) {
       showBackPressedWarning(
           onBackPressed: null,
           text: 'Your data is not saved. Are you sure you want to go back?');
@@ -86,6 +90,8 @@ class _StockCountingState extends State<StockCounting> {
                           controller: _rackNo, labelText: 'Rack Number'),
                       if (selectedOption == 'Manual')
                         getTextField(controller: _code, labelText: 'Item Code'),
+                      getTextField(controller: _qty, labelText: 'Qty'),
+                      _uomDropdownButton(),
                       _dropdownButton(),
                       Align(
                         alignment: Alignment.centerRight,
@@ -96,7 +102,7 @@ class _StockCountingState extends State<StockCounting> {
                             height: Get.height / 18,
                             child: loadingButton(
                                 isLoading: false,
-                                btnText: '+ Add Item',
+                                btnText: 'Submit',
                                 fontSize: 16,
                                 elevation: 4,
                                 onPress: () async {
@@ -130,281 +136,199 @@ class _StockCountingState extends State<StockCounting> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ListView.separated(
-                        itemCount: items.length,
-                        shrinkWrap: true,
-                        reverse: true,
-                        controller: _scrollController,
-                        physics: ScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          StockCountingDetailModel stockCountingDetail =
-                              items[index];
-                          return Container(
-                            decoration: new BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(16.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 4.0,
-                                  offset: const Offset(2.0, 2.0),
-                                ),
-                              ],
-                            ),
-                            margin: EdgeInsets.only(
-                                left: 15.0, right: 15.0, bottom: 10),
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 8.0,
-                                                  top: 4.0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: FittedBox(
-                                                  fit: BoxFit.contain,
-                                                  child: Text.rich(
-                                                    TextSpan(
-                                                      children: [
-                                                        getPoppinsTextSpanHeading(
-                                                            text: 'Item Code'),
-                                                        getPoppinsTextSpanDetails(
-                                                            text: stockCountingDetail
-                                                                    .varItemNo ??
-                                                                ''),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 8.0,
-                                                  top: 4.0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      getPoppinsTextSpanHeading(
-                                                          text:
-                                                              'Item Description'),
-                                                      getPoppinsTextSpanDetails(
-                                                          text: stockCountingDetail
-                                                                  .varItemDescription ??
-                                                              ''),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 8.0,
-                                                  top: 4.0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      getPoppinsTextSpanHeading(
-                                                          text: 'In Stock'),
-                                                      getPoppinsTextSpanDetails(
-                                                          text: stockCountingDetail
-                                                                  .decInStock
-                                                                  ?.toStringAsFixed(
-                                                                      2) ??
-                                                              ''),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        flex: 8,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            // Padding(
-                                            //   padding: const EdgeInsets.only(
-                                            //       left: 8.0,
-                                            //       right: 8.0,
-                                            //       top: 4.0),
-                                            //   child: Align(
-                                            //     alignment: Alignment.topLeft,
-                                            //     child: Text.rich(
-                                            //       TextSpan(
-                                            //         children: [
-                                            //           getPoppinsTextSpanHeading(
-                                            //               text: 'UOM Code'),
-                                            //           getPoppinsTextSpanDetails(
-                                            //               text: stockCountingDetail
-                                            //                       .varUomCode ??
-                                            //                   ''),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                  22,
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, right: 10),
-                                              child: getTextFieldWithoutLookup(
-                                                controller: stockCountingDetail
-                                                    .quantity,
-                                                labelText: 'Quantity',
-                                                keyboardType:
-                                                    getDecimalKeyboardType(),
-                                                inputFormatters: [
-                                                  getDecimalRegEx()
-                                                ],
-                                                style: new TextStyle(
-                                                  fontFamily: "Poppins",
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8, right: 20),
-                                              child: FittedBox(
-                                                child: Row(
-                                                  children: [
-                                                    getHeadingText(
-                                                        text: 'UOM: '),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 8.0),
-                                                      child: DropdownButton<
-                                                          String>(
-                                                        value:
-                                                            '${stockCountingDetail.varUomName}',
-                                                        onChanged:
-                                                            (String? newValue) {
-                                                          stockCountingDetail
-                                                                  .varUomName =
-                                                              newValue;
-                                                          stockCountingDetail
-                                                                  .varUomCode =
-                                                              getUOMCode(
-                                                                  UOMName:
-                                                                      newValue!,
-                                                                  stockCountingDetailModel:
-                                                                      stockCountingDetail);
-
-                                                          setState(() {});
-                                                        },
-                                                        items: stockCountingDetail
-                                                            .uomNameList
-                                                            .map<
-                                                                DropdownMenuItem<
-                                                                    String>>((String
-                                                                value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            value: value,
-                                                            child: FittedBox(
-                                                                child: Text(
-                                                                    value)),
-                                                          );
-                                                        }).toList(),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                height: Get.height / 24,
-                                                // color: Colors.red,
-                                                width: Get.width / 4,
-                                                margin: const EdgeInsets.only(
-                                                    right: 10, left: 8),
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    showBackPressedWarning(
-                                                      onBackPressed: () {
-                                                        items.removeAt(index);
-                                                        setState(() {});
-                                                        Get.back();
-                                                      },
-                                                      text:
-                                                          'Are you sure you want to delete ${stockCountingDetail.varItemNo}?',
-                                                    );
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.delete_forever,
-                                                        color: Colors.red,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 15,
-                                                      ),
-                                                      getHeadingText(
-                                                          text: 'Delete'),
-                                                    ],
-                                                  ),
-                                                ),
-                                                //
-                                                // child: ListTile(
-                                                //   contentPadding:  EdgeInsets.zero,
-                                                //   tileColor: Colors.blue,
-                                                //   leading: Icon(Icons.delete_forever,color: Colors.red,),
-                                                //   title: getHeadingText(text: 'Delete'),
-                                                // ),
-                                                // child: loadingButton(
-                                                //     isLoading: false,
-                                                //     backColor: Colors.red,
-                                                //     btnText: 'Delete',
-                                                //     onPress: () {}),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        flex: 8,
+                      FutureBuilder(
+                          future: ServiceManager.getStocksByUser(),
+                          builder: (context, snapshot) {
+                            return ListView.separated(
+                              itemCount: snapshot.data?.length ?? 0,
+                              shrinkWrap: true,
+                              reverse: true,
+                              controller: _scrollController,
+                              physics: ScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                StockCountingDetailModel stockCountingDetail =
+                                    snapshot.data![index];
+                                return Container(
+                                  decoration: new BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4.0,
+                                        offset: const Offset(2.0, 2.0),
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return getDivider();
-                        },
-                      ),
+                                  margin: EdgeInsets.only(
+                                      left: 15.0, right: 15.0, bottom: 10),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0,
+                                                            top: 4.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: FittedBox(
+                                                        fit: BoxFit.contain,
+                                                        child: Text.rich(
+                                                          TextSpan(
+                                                            children: [
+                                                              getPoppinsTextSpanHeading(
+                                                                  text:
+                                                                      'Item Code'),
+                                                              getPoppinsTextSpanDetails(
+                                                                  text: stockCountingDetail
+                                                                          .varItemNo ??
+                                                                      ''),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0,
+                                                            top: 4.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            getPoppinsTextSpanHeading(
+                                                                text:
+                                                                    'Item Description'),
+                                                            getPoppinsTextSpanDetails(
+                                                                text: stockCountingDetail
+                                                                        .varItemDescription ??
+                                                                    ''),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0,
+                                                            top: 4.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            getPoppinsTextSpanHeading(
+                                                                text:
+                                                                    'In Stock'),
+                                                            getPoppinsTextSpanDetails(
+                                                                text: stockCountingDetail
+                                                                        .decInStock
+                                                                        ?.toStringAsFixed(
+                                                                            2) ??
+                                                                    ''),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              flex: 8,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0,
+                                                            top: 4.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            getPoppinsTextSpanHeading(
+                                                                text: 'Qty'),
+                                                            getPoppinsTextSpanDetails(
+                                                                text: stockCountingDetail
+                                                                        .decQuantity
+                                                                        ?.toStringAsFixed(
+                                                                            0) ??
+                                                                    ''),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0,
+                                                            top: 4.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            getPoppinsTextSpanHeading(
+                                                                text:
+                                                                    'UOM Code'),
+                                                            getPoppinsTextSpanDetails(
+                                                                text: stockCountingDetail
+                                                                        .varUomCode ??
+                                                                    ''),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              flex: 8,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return getDivider();
+                              },
+                            );
+                          }),
                       const SizedBox(
                         height: 70,
                       ),
@@ -417,12 +341,6 @@ class _StockCountingState extends State<StockCounting> {
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _save,
-          child: FittedBox(
-              child: getHeadingText(
-                  text: 'Submit', color: Colors.white, fontSize: 10)),
         ),
       ),
     );
@@ -458,6 +376,37 @@ class _StockCountingState extends State<StockCounting> {
     );
   }
 
+  Widget _uomDropdownButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, left: 15, right: 20),
+      child: Row(
+        children: [
+          Expanded(child: getHeadingText(text: 'Select UOM')),
+          Expanded(
+            child: SizedBox(
+              width: Get.width / 1.2,
+              child: DropdownButton<UomModel>(
+                value: selectedUOM, // selectedUOM must be of type UomModel?
+                onChanged: (UomModel? newValue) {
+                  setState(() {
+                    selectedUOM = newValue!;
+                  });
+                },
+                items:
+                    uomList.map<DropdownMenuItem<UomModel>>((UomModel value) {
+                  return DropdownMenuItem<UomModel>(
+                    value: value,
+                    child: FittedBox(child: Text(value.varUomName ?? '')),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   String getUOMCode(
       {required String UOMName,
       required StockCountingDetailModel stockCountingDetailModel}) {
@@ -472,15 +421,27 @@ class _StockCountingState extends State<StockCounting> {
   }
 
   getInfo() async {
+    await ServiceManager.getUOMList(
+        onSuccess: onUOMSuccess, onError: onUOMError);
     _deviceNumber.text = (await getDeviceId()) ?? '';
     setState(() {});
   }
 
+  onUOMSuccess(List<UomModel> uomList) {
+    if (uomList.isNotEmpty) {
+      selectedUOM = uomList[0];
+      this.uomList = uomList;
+    }
+  }
+
+  onUOMError() {}
+
   onSuccess(StockCountingDetailModel countingDetailModel) {
     print(countingDetailModel.toJson());
     _code.clear();
-    countingDetailModel.quantity.text =
-        countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
+    // print("Quantity ${countingDetailModel.decQuantity?.toStringAsFixed(2)}");
+    // countingDetailModel.quantity.text = countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
+    countingDetailModel.quantity.text = _qty.text;
     if (countingDetailModel.quantity.text == '0.00') {
       countingDetailModel.quantity.clear();
     }
@@ -495,70 +456,66 @@ class _StockCountingState extends State<StockCounting> {
         countingDetailModel.uomNameList.add(uom.varUomName!);
       }
     }
-    setState(() {
-      items.add(countingDetailModel);
-    });
+
+    _save(countingDetailModel);
+    // setState(() {
+    //   items.add(countingDetailModel);
+    // });
   }
 
   onError() {
     getErrorSnackBar('Item does not exists');
   }
 
-  bool isFormValidated() {
+  bool isFormValidated(StockCountingDetailModel stockCountingDetailModel) {
     bool isSuccess = true;
     if (_rackNo.text == '') {
       getErrorSnackBar('Rack no required');
       isSuccess = false;
-    } else if (items.isEmpty) {
-      getErrorSnackBar('At least one item required');
+    }
+
+    double? qty = double.tryParse(stockCountingDetailModel.quantity.text);
+    if ((qty ?? 0.0) < 0.0) {
+      qty = 0.0;
+    }
+
+    if ((qty ?? 0.0) == 0.0) {
+      getErrorSnackBar(
+          "${stockCountingDetailModel.varItemDescription}'s quantity required");
       isSuccess = false;
     }
-    for (StockCountingDetailModel stockCountingDetailModel in items) {
-      double? qty = double.tryParse(stockCountingDetailModel.quantity.text);
-      if ((qty ?? 0.0) < 0.0) {
-        qty = 0.0;
-      }
-
-      if ((qty ?? 0.0) == 0.0) {
-        getErrorSnackBar(
-            "${stockCountingDetailModel.varItemDescription}'s quantity required");
-        isSuccess = false;
-      }
-      if (stockCountingDetailModel.varUomName == '---SELECT---') {
-        getErrorSnackBar(
-            "Please select UOM in ${stockCountingDetailModel.varItemDescription}");
-        isSuccess = false;
-      }
+    if (stockCountingDetailModel.varUomName == '---SELECT---') {
+      getErrorSnackBar(
+          "Please select UOM in ${stockCountingDetailModel.varItemDescription}");
+      isSuccess = false;
     }
     return isSuccess;
   }
-
-  _save() async {
-    if (isFormValidated()) {
+  _save(StockCountingDetailModel stockCountingDetailModel) async {
+    if (isFormValidated(stockCountingDetailModel)) {
       List<StockCountRequestModel> requestList = [];
       CustomerModel customerModel = CustomerModel.getLoginCustomer();
-      for (StockCountingDetailModel stockCountingDetailModel in items) {
-        double? qty = double.tryParse(stockCountingDetailModel.quantity.text);
-        requestList.add(StockCountRequestModel(
-          bigintUserId: customerModel.userId,
-          decInStock: stockCountingDetailModel.decInStock,
-          varItemDescription: stockCountingDetailModel.varItemDescription,
-          decQuantity: qty ?? stockCountingDetailModel.decQuantity,
-          varDeviceNo: _deviceNumber.text,
-          varItemNo: stockCountingDetailModel.varItemNo,
-          varRackNo: _rackNo.text,
-          varBarcode: stockCountingDetailModel.varBarcode,
-          varUomCode: stockCountingDetailModel.varUomCode,
-          varWarehouseCode: stockCountingDetailModel.varWarehouseCode,
-        ));
-      }
+      double? qty = double.tryParse(_qty.text);
+      requestList.add(StockCountRequestModel(
+        bigintUserId: customerModel.userId,
+        decInStock: stockCountingDetailModel.decInStock,
+        varItemDescription: stockCountingDetailModel.varItemDescription,
+        decQuantity: qty ?? 0,
+        varDeviceNo: _deviceNumber.text,
+        varItemNo: stockCountingDetailModel.varItemNo,
+        varRackNo: _rackNo.text,
+        varBarcode: stockCountingDetailModel.varBarcode,
+        varUomCode: selectedUOM?.varUomCode,
+        varWarehouseCode: stockCountingDetailModel.varWarehouseCode,
+      ));
+
       if (await ServiceManager.isInternetAvailable()) {
         ServiceManager.saveStockCounting(
             requestList: requestList,
             onSuccess: (Map map) {
-              items.clear();
               _rackNo.clear();
-              getSuccessSnackBar(map['message']??'Your data is saved');
+              _qty.clear();
+              getSuccessSnackBar(map['message'] ?? 'Your data is saved');
               setState(() {});
             },
             onError: (String error) {

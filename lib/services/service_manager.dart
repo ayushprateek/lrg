@@ -17,8 +17,10 @@ import 'package:url_launcher/url_launcher.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class ServiceManager {
-  // static String baseURL = 'http://51.79.229.83:8080/API/';///DEVELOPMENT
-  static String baseURL = 'http://51.79.229.83:8080/Live/API/';///LIVE
+  static String baseURL = 'http://51.79.229.83:8080/API/';
+
+  ///DEVELOPMENT
+  // static String baseURL = 'http://51.79.229.83:8080/Live/API/';///LIVE
   static Map<String, String>? header = {
     'accept': '*/*',
     'Content-Type': 'application/json'
@@ -37,18 +39,16 @@ class ServiceManager {
     try {
       if (await canLaunchUrl(uri ?? Uri.parse(''))) {
         await launchUrl(uri ?? Uri.parse(''));
-      } else {
-
-      }
-    } catch (e) {
-
-    }
+      } else {}
+    } catch (e) {}
   }
+
   static launchCSV() async {
     try {
-      File file=File('/storage/emulated/0/Download/report.csv');
+      File file = File('/storage/emulated/0/Download/report.csv');
       print(await file.exists());
-      if (await canLaunchUrl(Uri.parse('/storage/emulated/0/Download/report.csv'))) {
+      if (await canLaunchUrl(
+          Uri.parse('/storage/emulated/0/Download/report.csv'))) {
         await launchUrl(Uri.parse('/storage/emulated/0/Download/report.csv'));
       } else {
         print('Cant launch');
@@ -93,6 +93,26 @@ class ServiceManager {
       onSuccess(warehouseList);
     } else {
       onError();
+    }
+  }
+
+  static Future<List<StockCountingDetailModel>> getStocksByUser() async {
+    List<StockCountingDetailModel> stockList = [];
+    CustomerModel customerModel = CustomerModel.getLoginCustomer();
+    var res = await http.get(
+      Uri.parse('${baseURL}Items/GetStocksByUser?userId=${customerModel.userId}'),
+      headers: header,
+    );
+    print(res.body);
+    if (res.statusCode == 200) {
+      var stocks = jsonDecode(res.body);
+      for (Map stock in stocks) {
+        stockList.add(StockCountingDetailModel.fromJson(stock));
+      }
+
+      return stockList;
+    } else {
+      return [];
     }
   }
 
@@ -152,8 +172,7 @@ class ServiceManager {
     );
     print(res.body);
     if (res.statusCode == 200) {
-      if(res.body=='null')
-      {
+      if (res.body == 'null') {
         onError();
         return;
       }
@@ -184,11 +203,10 @@ class ServiceManager {
     );
     print(res.body);
     if (res.statusCode == 200) {
-      if(res.body=='null')
-        {
-          onError();
-          return;
-        }
+      if (res.body == 'null') {
+        onError();
+        return;
+      }
       stockCountingDetail = stockCountingDetailModelFromJson(res.body);
       onSuccess(stockCountingDetail);
     } else {

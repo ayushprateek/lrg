@@ -41,7 +41,7 @@ class StockCountingDetailModel {
     this.uomList,
   });
 
-  factory StockCountingDetailModel.fromJson(Map<String, dynamic> json){
+  factory StockCountingDetailModel.fromJson(Map json){
 
     return StockCountingDetailModel(
       bigintItemId: int.tryParse(json["bigintItemId"].toString()),
