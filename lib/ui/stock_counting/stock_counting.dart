@@ -28,10 +28,13 @@ class _StockCountingState extends State<StockCounting> {
   final TextEditingController _deviceNumber = TextEditingController();
   final TextEditingController _rackNo = TextEditingController();
   final TextEditingController _code = TextEditingController();
+  final FocusNode _codeFocusNode = FocusNode();
+
   final TextEditingController _qty = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<UomModel> uomList = [];
   UomModel? selectedUOM;
+  bool displayQtyField=false;
 
   // List<StockCountingDetailModel> items = [];
   String selectedOption = 'Scan';
@@ -89,7 +92,8 @@ class _StockCountingState extends State<StockCounting> {
                       getTextField(
                           controller: _rackNo, labelText: 'Rack Number'),
                       if (selectedOption == 'Manual')
-                        getTextField(controller: _code, labelText: 'Item Code'),
+                        getTextField(controller: _code, focusNode: _codeFocusNode,labelText: 'Item Code',autofocus: true),
+                      if(displayQtyField)
                       getTextField(controller: _qty, labelText: 'Qty'),
                       _uomDropdownButton(),
                       _dropdownButton(),
@@ -102,7 +106,7 @@ class _StockCountingState extends State<StockCounting> {
                             height: Get.height / 18,
                             child: loadingButton(
                                 isLoading: false,
-                                btnText: 'Submit',
+                                btnText: displayQtyField?'Submit':'Find',
                                 fontSize: 16,
                                 elevation: 4,
                                 onPress: () async {
@@ -438,7 +442,17 @@ class _StockCountingState extends State<StockCounting> {
 
   onSuccess(StockCountingDetailModel countingDetailModel) {
     print(countingDetailModel.toJson());
-    _code.clear();
+
+    ///Item exists
+    ///if quantity is not entered by user then set the qty and return
+    if (_qty.text.isEmpty || (int.tryParse(_qty.text) ?? 0) == 0) {
+      _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '0';
+      CustomSnackBar.successSnackBar('Please enter the qty');
+      setState(() {
+        displayQtyField=true;
+      });
+      return;
+    }
     // print("Quantity ${countingDetailModel.decQuantity?.toStringAsFixed(2)}");
     // countingDetailModel.quantity.text = countingDetailModel.decQuantity?.toStringAsFixed(2) ?? '';
     countingDetailModel.quantity.text = _qty.text;
@@ -491,6 +505,7 @@ class _StockCountingState extends State<StockCounting> {
     }
     return isSuccess;
   }
+
   _save(StockCountingDetailModel stockCountingDetailModel) async {
     if (isFormValidated(stockCountingDetailModel)) {
       List<StockCountRequestModel> requestList = [];
@@ -513,10 +528,14 @@ class _StockCountingState extends State<StockCounting> {
         ServiceManager.saveStockCounting(
             requestList: requestList,
             onSuccess: (Map map) {
+              _code.clear();
               _rackNo.clear();
               _qty.clear();
+              displayQtyField=false;
+
               getSuccessSnackBar(map['message'] ?? 'Your data is saved');
               setState(() {});
+              FocusScope.of(context).requestFocus(_codeFocusNode);
             },
             onError: (String error) {
               getErrorSnackBar(error);

@@ -56,6 +56,7 @@ Widget getTextField(
           Expanded(
             child: TextFormField(
               controller: controller,
+              focusNode: focusNode,
               onChanged: (val) {
                 if (onChanged != null) {
                   onChanged(val);
