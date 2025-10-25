@@ -113,7 +113,7 @@ class _StockCountingState extends State<StockCounting> {
                                   _code.clear();
                                   _description.clear();
                                   _qty.clear();
-                                  selectedUOM=null;
+                                  selectedUOM = null;
                                   setState(() {
                                     displayQtyField = false;
                                   });
@@ -128,6 +128,7 @@ class _StockCountingState extends State<StockCounting> {
                             controller: _description, labelText: 'Description'),
                         getTextField(
                             controller: _qty,
+                            keyboardType: TextInputType.number,
                             labelText: 'Qty',
                             focusNode: _qtyFocusNode),
                         if (uomList.isNotEmpty) _uomDropdownButton(),
@@ -324,7 +325,7 @@ class _StockCountingState extends State<StockCounting> {
                                                                 text: stockCountingDetail
                                                                         .decQuantity
                                                                         ?.toStringAsFixed(
-                                                                            0) ??
+                                                                            2) ??
                                                                     ''),
                                                           ],
                                                         ),
@@ -484,7 +485,7 @@ class _StockCountingState extends State<StockCounting> {
 
     ///Item exists
     ///if quantity is not entered by user then set the qty and return
-    if (_qty.text.isEmpty || (int.tryParse(_qty.text) ?? 0) == 0) {
+    if (_qty.text.isEmpty || (double.tryParse(_qty.text) ?? 0) == 0) {
       _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '0';
       _description.text = countingDetailModel.varItemDescription ?? '';
       uomList = countingDetailModel.uomList ?? [];
@@ -496,11 +497,13 @@ class _StockCountingState extends State<StockCounting> {
       if (selectedUOM == null && uomList.isNotEmpty) {
         selectedUOM = uomList[0];
       }
-      CustomSnackBar.successSnackBar('Please enter the qty');
+      CustomSnackBar.errorSnackBar('Please enter the qty');
       setState(() {
         displayQtyField = true;
       });
-      FocusScope.of(context).requestFocus(_qtyFocusNode);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(_qtyFocusNode);
+      });
       return;
     }
     // print("Quantity ${countingDetailModel.decQuantity?.toStringAsFixed(2)}");
