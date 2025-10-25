@@ -486,7 +486,12 @@ class _StockCountingState extends State<StockCounting> {
     ///Item exists
     ///if quantity is not entered by user then set the qty and return
     if (_qty.text.isEmpty || (double.tryParse(_qty.text) ?? 0) == 0) {
-      _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '0';
+      if (countingDetailModel.decQuantity == 0.0) {
+        _qty.text = '';
+      } else {
+        _qty.text = countingDetailModel.decQuantity?.toStringAsFixed(0) ?? '';
+      }
+
       _description.text = countingDetailModel.varItemDescription ?? '';
       uomList = countingDetailModel.uomList ?? [];
       for (UomModel uomModel in uomList) {
