@@ -46,50 +46,55 @@ Widget screenWithAppBar(
       },
     );
   }
-  return Scaffold(
-    resizeToAvoidBottomInset: false,
-    backgroundColor: backgroundColor,
-    key: key,
-    drawer: drawer,
-    appBar: AppBar(
-      backgroundColor: appBarBackgroundColor,
-      elevation: 0.0,
-      title: title != null && title is String?
-          ? Column(
-              children: [
-                // if (financialYear != null && financialYear != '')
-                  getHeadingText(
-                      text:
-                      title??'',
-                      fontSize: 15,
-                      color: Colors.white),
-                // Text(
-                //   title??'',
-                //   style: textLabelBoldStyleWithCustomSize(16, buttonColor,
-                //       fontWeight: FontWeight.bold),
-                // ),
-              ],
-            )
-          : title is Widget
-              ? title
-              : Text(
-                  "",
-                  style: textLabelBoldStyleWithCustomSize(16, buttonColor,
-                      fontWeight: FontWeight.bold),
-                ),
-      centerTitle: centerTitle,
-      leadingWidth: leadingWidth,
-      leading: isBackVisible ? leading : Container(),
-      actions: actions,
-      bottom: bottom as PreferredSizeWidget?,
-      // shape: ContinuousRectangleBorder(
-      //     borderRadius: BorderRadius.only(
-      //         bottomRight: Radius.circular(radius),
-      //         bottomLeft: Radius.circular(radius))),
+  return SafeArea(
+    top: false,
+    left: false,
+    right: false,
+    child: Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
+      key: key,
+      drawer: drawer,
+      appBar: AppBar(
+        backgroundColor: appBarBackgroundColor,
+        elevation: 0.0,
+        title: title != null && title is String?
+            ? Column(
+                children: [
+                  // if (financialYear != null && financialYear != '')
+                    getHeadingText(
+                        text:
+                        title??'',
+                        fontSize: 15,
+                        color: Colors.white),
+                  // Text(
+                  //   title??'',
+                  //   style: textLabelBoldStyleWithCustomSize(16, buttonColor,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                ],
+              )
+            : title is Widget
+                ? title
+                : Text(
+                    "",
+                    style: textLabelBoldStyleWithCustomSize(16, buttonColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+        centerTitle: centerTitle,
+        leadingWidth: leadingWidth,
+        leading: isBackVisible ? leading : Container(),
+        actions: actions,
+        bottom: bottom as PreferredSizeWidget?,
+        // shape: ContinuousRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //         bottomRight: Radius.circular(radius),
+        //         bottomLeft: Radius.circular(radius))),
+      ),
+      body: body,
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
     ),
-    body: body,
-    bottomNavigationBar: bottomNavigationBar,
-    floatingActionButton: floatingActionButton,
   );
 }
 
