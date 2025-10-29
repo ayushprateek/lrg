@@ -21,7 +21,9 @@ class ServiceManager {
   // static String baseURL = 'http://51.79.229.83:8080/API/';
 
   ///PRODUCTION URL
-  static String baseURL = 'http://51.79.229.83:8080/Live/API/';///LIVE
+  static String baseURL = 'http://51.79.229.83:8080/Live/API/';
+
+  ///LIVE
   static Map<String, String>? header = {
     'accept': '*/*',
     'Content-Type': 'application/json'
@@ -101,7 +103,8 @@ class ServiceManager {
     List<StockCountingDetailModel> stockList = [];
     CustomerModel customerModel = CustomerModel.getLoginCustomer();
     var res = await http.get(
-      Uri.parse('${baseURL}Items/GetStocksByUser?userId=${customerModel.userId}'),
+      Uri.parse(
+          '${baseURL}Items/GetStocksByUser?userId=${customerModel.userId}'),
       headers: header,
     );
     print(res.body);
@@ -114,6 +117,21 @@ class ServiceManager {
       return stockList;
     } else {
       return [];
+    }
+  }
+
+  static Future<bool> deleteStocks({required int id}) async {
+    var res = await http.delete(
+      Uri.parse('${baseURL}Items/DeleteStockById?id=$id'),
+      headers: header,
+    );
+    print(res.body);
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+
+      return true;
+    } else {
+      return false;
     }
   }
 

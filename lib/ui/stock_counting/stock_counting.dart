@@ -6,6 +6,7 @@ import 'package:miesp/models/stock_count_request_model.dart';
 import 'package:miesp/models/stock_counting_detail_model.dart';
 import 'package:miesp/models/uom_model.dart';
 import 'package:miesp/services/service_manager.dart';
+import 'package:miesp/theme/custom_colors.dart';
 import 'package:miesp/theme/custom_snack_bar.dart';
 import 'package:miesp/theme/custom_text_widgets.dart';
 import 'package:miesp/theme/elements_screen.dart';
@@ -192,179 +193,300 @@ class _StockCountingState extends State<StockCounting> {
                               itemBuilder: (BuildContext context, int index) {
                                 StockCountingDetailModel stockCountingDetail =
                                     snapshot.data![index];
-                                return Container(
-                                  decoration: new BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 4.0,
-                                        offset: const Offset(2.0, 2.0),
+                                return Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Container(
+                                      decoration: new BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.rectangle,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black26,
+                                            blurRadius: 4.0,
+                                            offset: const Offset(2.0, 2.0),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 15.0, right: 15.0, bottom: 10),
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                      margin: EdgeInsets.only(
+                                          left: 15.0, right: 15.0, bottom: 10),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
                                           children: [
-                                            Expanded(
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0,
-                                                            top: 4.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: FittedBox(
-                                                        fit: BoxFit.contain,
-                                                        child: Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              getPoppinsTextSpanHeading(
-                                                                  text:
-                                                                      'Item Code'),
-                                                              getPoppinsTextSpanDetails(
-                                                                  text: stockCountingDetail
-                                                                          .varItemNo ??
-                                                                      ''),
-                                                            ],
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 8.0,
+                                                                right: 8.0,
+                                                                top: 4.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: Text.rich(
+                                                              TextSpan(
+                                                                children: [
+                                                                  getPoppinsTextSpanHeading(
+                                                                      text:
+                                                                          'Item Code'),
+                                                                  getPoppinsTextSpanDetails(
+                                                                      text: stockCountingDetail
+                                                                              .varItemNo ??
+                                                                          ''),
+                                                                ],
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0,
-                                                            top: 4.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            getPoppinsTextSpanHeading(
-                                                                text:
-                                                                    'Item Description'),
-                                                            getPoppinsTextSpanDetails(
-                                                                text: stockCountingDetail
-                                                                        .varItemDescription ??
-                                                                    ''),
-                                                          ],
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 8.0,
+                                                                right: 8.0,
+                                                                top: 4.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                getPoppinsTextSpanHeading(
+                                                                    text:
+                                                                        'Item Description'),
+                                                                getPoppinsTextSpanDetails(
+                                                                    text: stockCountingDetail
+                                                                            .varItemDescription ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0,
-                                                            top: 4.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            getPoppinsTextSpanHeading(
-                                                                text:
-                                                                    'In Stock'),
-                                                            getPoppinsTextSpanDetails(
-                                                                text: stockCountingDetail
-                                                                        .decInStock
-                                                                        ?.toStringAsFixed(
-                                                                            2) ??
-                                                                    ''),
-                                                          ],
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 8.0,
+                                                                right: 8.0,
+                                                                top: 4.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                getPoppinsTextSpanHeading(
+                                                                    text:
+                                                                        'In Stock'),
+                                                                getPoppinsTextSpanDetails(
+                                                                    text: stockCountingDetail
+                                                                            .decInStock
+                                                                            ?.toStringAsFixed(2) ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              flex: 8,
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0,
-                                                            top: 4.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            getPoppinsTextSpanHeading(
-                                                                text: 'Qty'),
-                                                            getPoppinsTextSpanDetails(
-                                                                text: stockCountingDetail
-                                                                        .decQuantity
-                                                                        ?.toStringAsFixed(
-                                                                            2) ??
-                                                                    ''),
-                                                          ],
+                                                  flex: 8,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 8.0,
+                                                                right: 8.0,
+                                                                top: 4.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                getPoppinsTextSpanHeading(
+                                                                    text:
+                                                                        'Qty'),
+                                                                getPoppinsTextSpanDetails(
+                                                                    text: stockCountingDetail
+                                                                            .decQuantity
+                                                                            ?.toStringAsFixed(2) ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0,
-                                                            top: 4.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            getPoppinsTextSpanHeading(
-                                                                text:
-                                                                    'UOM Code'),
-                                                            getPoppinsTextSpanDetails(
-                                                                text: stockCountingDetail
-                                                                        .varUomCode ??
-                                                                    ''),
-                                                          ],
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 8.0,
+                                                                right: 8.0,
+                                                                top: 4.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                getPoppinsTextSpanHeading(
+                                                                    text:
+                                                                        'UOM Code'),
+                                                                getPoppinsTextSpanDetails(
+                                                                    text: stockCountingDetail
+                                                                            .varUomCode ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              flex: 8,
+                                                  flex: 8,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        right: 8,
+                                        top: -16,
+                                        child: InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              barrierDismissible: false,
+                                              context: Get.context!,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            18,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            1.5,
+                                                    child: Text(
+                                                      "Are you sure you want to delete this stock item?",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16),
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    MaterialButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(40),
+                                                      ),
+                                                      color: appPrimary,
+                                                      child: getHeadingText(
+                                                          text: 'Cancel',
+                                                          color: Colors.white),
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                    ),
+                                                    MaterialButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(40),
+                                                      ),
+                                                      color: Colors.red,
+                                                      child: getHeadingText(
+                                                          text: 'Yes',
+                                                          color: Colors.white),
+                                                      onPressed: () async {
+                                                        if (stockCountingDetail
+                                                                    .bigintWHStockId ==
+                                                                null ||
+                                                            stockCountingDetail
+                                                                    .bigintWHStockId ==
+                                                                0) {
+                                                          Get.back();
+
+                                                          CustomSnackBar
+                                                              .errorSnackBar(
+                                                                  'Stock Id does not exist');
+
+                                                          return;
+                                                        }
+                                                        if (await ServiceManager
+                                                            .deleteStocks(
+                                                                id: stockCountingDetail
+                                                                    .bigintWHStockId!)) {
+                                                          Get.back();
+                                                          CustomSnackBar
+                                                              .successSnackBar(
+                                                                  'Stock deleted successfully');
+                                                        } else {
+                                                          Get.back();
+                                                          CustomSnackBar
+                                                              .errorSnackBar(
+                                                                  'Something went wrong');
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.grey.shade200),
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                        ))
+                                  ],
                                 );
                               },
                               separatorBuilder:
@@ -590,6 +712,7 @@ class _StockCountingState extends State<StockCounting> {
             onSuccess: (Map map) {
               _code.clear();
               _qty.clear();
+              _rackNo.clear();
               _description.clear();
               selectedUOM = null;
               displayQtyField = false;

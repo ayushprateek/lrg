@@ -10,6 +10,7 @@ String stockCountingDetailModelToJson(StockCountingDetailModel data) =>
     json.encode(data.toJson());
 
 class StockCountingDetailModel {
+  int? bigintWHStockId;
   int? bigintItemId;
   String? varItemNo;
   String? varBarcode;
@@ -26,6 +27,7 @@ class StockCountingDetailModel {
   List<UomModel>? uomList;
   Set<String> uomNameList = {'---SELECT---'};
   StockCountingDetailModel({
+    this.bigintWHStockId,
     this.bigintItemId,
     this.varItemNo,
     this.varBarcode,
@@ -44,6 +46,7 @@ class StockCountingDetailModel {
   factory StockCountingDetailModel.fromJson(Map json){
 
     return StockCountingDetailModel(
+      bigintWHStockId: int.tryParse(json["bigintWHStockId"].toString()),
       bigintItemId: int.tryParse(json["bigintItemId"].toString()),
       varItemNo: json["varItemNo"],
       varBarcode: json["varBarcode"],
@@ -69,6 +72,7 @@ class StockCountingDetailModel {
   }
 
   Map<String, dynamic> toJson() => {
+        "bigintWHStockId": bigintWHStockId,
         "bigintItemId": bigintItemId,
         "varItemNo": varItemNo,
         "varBarcode": varBarcode,
