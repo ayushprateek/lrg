@@ -117,11 +117,13 @@ Text getSubHeadingText({
   TextAlign textAlign = TextAlign.start,
   int? maxLines,
   double fontSize = 12,
+  FontWeight? fontWeight,
   Color color = Colors.black,
 }) {
   return getPoppinsText(
       text: text,
       fontSize: fontSize,
+      fontWeight:fontWeight,
       textAlign: textAlign,
       color: color,
       maxLines: maxLines);

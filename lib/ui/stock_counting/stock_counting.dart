@@ -40,6 +40,7 @@ class _StockCountingState extends State<StockCounting> {
   List<UomModel> uomList = [];
   UomModel? selectedUOM;
   bool displayQtyField = false;
+  bool allowDuplicate = true;
 
   // List<StockCountingDetailModel> items = [];
   String selectedOption = 'Manual';
@@ -136,6 +137,19 @@ class _StockCountingState extends State<StockCounting> {
                         // getDisabledTextField(
                         //     controller: _UOM, labelText: 'UOM'),
                       ],
+                      CheckboxListTile(
+                        value: allowDuplicate,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding:  EdgeInsets.zero,
+                        onChanged: (val) {
+                          setState(() {
+                            allowDuplicate=!allowDuplicate;
+                          });
+                        },
+                        title:getSubHeadingText(text: 'Allow Duplicate',
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
 
                       // _dropdownButton(),
                       Align(
@@ -695,6 +709,7 @@ class _StockCountingState extends State<StockCounting> {
       double? qty = double.tryParse(_qty.text);
       requestList.add(StockCountRequestModel(
         bigintUserId: customerModel.userId,
+        allowDuplicate: allowDuplicate,
         decInStock: stockCountingDetailModel.decInStock,
         varItemDescription: stockCountingDetailModel.varItemDescription,
         decQuantity: qty ?? 0,
@@ -720,6 +735,7 @@ class _StockCountingState extends State<StockCounting> {
               FocusScope.of(context).requestFocus(_codeFocusNode);
             },
             onError: (String error) {
+
               getErrorSnackBar(error);
             });
       }

@@ -17,6 +17,7 @@ class StockCountRequestModel {
   String? varDeviceNo;
   String? varBarcode;
   String? varItemDescription;
+  bool allowDuplicate;
 
   StockCountRequestModel({
     this.varItemNo,
@@ -29,6 +30,7 @@ class StockCountRequestModel {
     this.varDeviceNo,
     this.varBarcode,
     this.varItemDescription,
+    this.allowDuplicate=true,
   });
 
   factory StockCountRequestModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +45,7 @@ class StockCountRequestModel {
         varDeviceNo: json["varDeviceNo"],
         varBarcode: json["varBarcode"],
         varItemDescription: json["varItemDescription"],
+        allowDuplicate: json["allowDuplicate"] is bool?json["allowDuplicate"]:json["allowDuplicate"]==1,
       );
 
   Map<String, dynamic> toJson() => {
@@ -56,5 +59,6 @@ class StockCountRequestModel {
         "varDeviceNo": varDeviceNo,
         "varBarcode": varBarcode,
         "varItemDescription": varItemDescription,
+        "allowDuplicate": allowDuplicate,
       };
 }

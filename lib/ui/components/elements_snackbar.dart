@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 getErrorSnackBar(
   String text,
 ) {
+  text=text.replaceAll('\"', '');
   Get.showSnackbar(GetSnackBar(
     backgroundColor: Colors.red,
     message: text,
