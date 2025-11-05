@@ -91,7 +91,7 @@ class _StockCountingState extends State<StockCounting> {
                       const SizedBox(
                         height: 30,
                       ),
-                      getTextField(
+                      getDisabledTextField(
                           controller: _deviceNumber,
                           labelText: 'Device Number'),
                       getTextField(
@@ -712,7 +712,6 @@ class _StockCountingState extends State<StockCounting> {
             onSuccess: (Map map) {
               _code.clear();
               _qty.clear();
-              _rackNo.clear();
               _description.clear();
               selectedUOM = null;
               displayQtyField = false;
