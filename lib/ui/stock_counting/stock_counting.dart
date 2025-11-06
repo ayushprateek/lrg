@@ -92,7 +92,7 @@ class _StockCountingState extends State<StockCounting> {
                       const SizedBox(
                         height: 30,
                       ),
-                      getDisabledTextField(
+                      getTextField(
                           controller: _deviceNumber,
                           labelText: 'Device Number'),
                       getTextField(
