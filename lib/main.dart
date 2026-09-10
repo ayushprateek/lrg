@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:miesp/local_storage/local_storage.dart';
 import 'package:miesp/miesp.dart';
 import 'package:miesp/theme/custom_theme.dart';
+import 'package:miesp/ui/components/elements_snackbar.dart';
 import 'package:tbib_downloader/tbib_downloader.dart';
 
 Future<void> main() async {
@@ -13,6 +14,7 @@ Future<void> main() async {
 
   runApp(GetMaterialApp(
     home: const MIESP(),
+    scaffoldMessengerKey: appScaffoldMessengerKey,
     debugShowCheckedModeBanner: false,
     theme: AppTheme.createLightTheme(),
     darkTheme: AppTheme.createLightTheme(),

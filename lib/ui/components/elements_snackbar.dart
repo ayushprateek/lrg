@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:miesp/theme/custom_colors.dart';
 
-getErrorSnackBar(
-  String text,
-) {
-  print(text);
-  text=text.replaceAll('\"', '');
+final GlobalKey<ScaffoldMessengerState> appScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
-  Get.showSnackbar(
-    GetSnackBar(
-      messageText: Text(
-        text,
-        style: TextStyle(color: Colors.white),
-      ),
-      backgroundColor: Colors.red,
-      duration: Duration(seconds: 2),
-    ),
-  );
+void getErrorSnackBar(String text) {
+  _showSnackBar(text.replaceAll('"', ''), Colors.red);
 }
 
-getSuccessSnackBar(
-  String text,
-) {
+void getSuccessSnackBar(String text) {
+  _showSnackBar(text, Colors.green);
+}
 
-  Get.showSnackbar(
-    GetSnackBar(
-      messageText: Text(
-        text,
-        style: TextStyle(color: Colors.white),
+void _showSnackBar(String text, Color backgroundColor) {
+  appScaffoldMessengerKey.currentState
+    ?..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(text),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 2),
       ),
-      backgroundColor: Colors.green,
-      duration: Duration(seconds: 2),
-    ),
-  );
+    );
 }
