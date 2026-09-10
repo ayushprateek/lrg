@@ -350,6 +350,10 @@ class _ReportPageState extends State<ReportPage> {
       '${ServiceManager.baseURL}Items/DownloadReport',
       receiveBytesAsMB: true,
       fileName: 'report.csv',
+      queryParameters: {
+        'startDate': startDate.toIso8601String(),
+        'endDate': endDate.toIso8601String(),
+      },
       // directoryName: 'data',
       onReceiveProgress: ({int? receivedBytes, int? totalBytes}) {
         if (!context.mounted) {
@@ -359,9 +363,6 @@ class _ReportPageState extends State<ReportPage> {
           progress = (receivedBytes! / totalBytes!);
         });
       },
-      //todo:startDate and endDate
-      startDate: startDate,
-      endDate: endDate,
       // saveFileInDataApp: true,
       // directoryName: 'test',
       // onReceiveProgress: ({int? count, int? total}) => debugPrint(
