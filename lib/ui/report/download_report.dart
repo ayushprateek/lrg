@@ -167,193 +167,194 @@ class _ReportPageState extends State<ReportPage> {
 
     ///REPLACE DOWNLOAD FUNCTION IN DEPENDENCY
     ///TODO: DO NOT DELETE  THIS COMMENT
-    //Future<String?> downloadFile<T>({
-    //     required String url,
-    //     required String fileName,
-    //     String? directoryName,
-    //     DateTime? startDate,
-    //     DateTime? endDate,
-    //     required BuildContext context,
-    //     bool disabledOpenFileButton = false,
-    //     bool disabledDeleteFileButton = false,
-    //     bool disabledShareFileButton = false,
-    //     bool hideButtons = false,
-    //     bool saveFileInDataApp = false,
-    //     bool showNotification = true,
-    //     Duration refreshNotificationProgress = const Duration(seconds: 1),
-    //     bool showDownloadSpeed = true,
-    //     bool showNotificationWithoutProgress = false,
-    //     bool receiveBytesAsMB = false,
-    //     Function({required int receivedBytes, required int totalBytes})?
-    //         onReceiveProgress,
-    //     //required Dio dio,
-    //   })
-    //   async {
-    //     if (Platform.isAndroid) {
-    //       final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    //       if (deviceInfo.version.sdkInt < 30) {
-    //         await Permission.storage.request();
-    //         if (!await Permission.storage.isGranted) {
-    //           ScaffoldMessenger.of(context).showSnackBar(
-    //             const SnackBar(
-    //               backgroundColor: Colors.red,
-    //               shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.all(
-    //                   Radius.circular(10),
-    //                 ),
+    // Future<String?> downloadFile<T>({
+    //   required String url,
+    //   required String fileName,
+    //   String? directoryName,
+    //   DateTime? startDate,
+    //   DateTime? endDate,
+    //   required BuildContext context,
+    //   bool disabledOpenFileButton = false,
+    //   bool disabledDeleteFileButton = false,
+    //   bool disabledShareFileButton = false,
+    //   bool hideButtons = false,
+    //   bool saveFileInDataApp = false,
+    //   bool showNotification = true,
+    //   Duration refreshNotificationProgress = const Duration(seconds: 1),
+    //   bool showDownloadSpeed = true,
+    //   bool showNotificationWithoutProgress = false,
+    //   bool receiveBytesAsMB = false,
+    //   Function({required int receivedBytes, required int totalBytes})?
+    //   onReceiveProgress,
+    //   //required Dio dio,
+    // })
+    // async {
+    //   if (Platform.isAndroid) {
+    //     final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    //     if (deviceInfo.version.sdkInt < 30) {
+    //       await Permission.storage.request();
+    //       if (!await Permission.storage.isGranted) {
+    //         ScaffoldMessenger.of(context).showSnackBar(
+    //           const SnackBar(
+    //             backgroundColor: Colors.red,
+    //             shape: RoundedRectangleBorder(
+    //               borderRadius: BorderRadius.all(
+    //                 Radius.circular(10),
     //               ),
-    //               behavior: SnackBarBehavior.floating,
-    //               content: Text('Permission denied to access storage'),
     //             ),
-    //           );
-    //           Future.delayed(const Duration(seconds: 2), () {
-    //             openAppSettings();
-    //           });
-    //           return null;
-    //         }
-    //       }
-    //     }
-    //
-    //     late String downloadDirectory;
-    //
-    //     if (_downloadStarted) {
-    //       dev.log('Download already started');
-    //       return null;
-    //     }
-    //     _downloadStarted = true;
-    //     if (Platform.isAndroid && !saveFileInDataApp) {
-    //       downloadDirectory =
-    //           "${await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS)}/";
-    //     } else {
-    //       if (saveFileInDataApp) {
-    //         downloadDirectory = "${(await getApplicationSupportDirectory()).path}/";
-    //       } else {
-    //         downloadDirectory =
-    //             "${(await getApplicationDocumentsDirectory()).path}/";
-    //       }
-    //     }
-    //     if (directoryName != null && Platform.isIOS) {
-    //       downloadDirectory = "$downloadDirectory$directoryName/";
-    //     }
-    //     if (Platform.isAndroid && directoryName != null) {
-    //       final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    //       if (deviceInfo.version.sdkInt > 30) {
-    //         downloadDirectory = "$downloadDirectory$directoryName/";
-    //       }
-    //     }
-    //
-    //     if (File(downloadDirectory).existsSync()) {
-    //       File(downloadDirectory).deleteSync(recursive: true);
-    //     }
-    //
-    //     await Directory(downloadDirectory).create(recursive: true);
-    //     if (Platform.isIOS && showNotification) {
-    //       await AwesomeNotifications().createNotification(
-    //         content: NotificationContent(
-    //             id: 1,
-    //             channelKey: 'download_channel',
-    //             title: 'Downloading',
-    //             body: 'Downloading $fileName',
-    //             wakeUpScreen: true,
-    //             locked: true),
-    //       );
-    //     }
-    //
-    //     DateTime startTime = DateTime.now();
-    //     DateTime notificationDisplayDate = DateTime.now();
-    //     DateTime endTime = DateTime.now().add(refreshNotificationProgress);
-    //     String? solvePath;
-    //     if (File('$downloadDirectory$fileName').existsSync()) {
-    //       solvePath = await getAvailableFilePath('$downloadDirectory$fileName');
-    //     }
-    //     bool showNewNotification = true;
-    //     try {
-    //       await _dio.post(
-    //         url, // The URL
-    //         data: {
-    //           "startDate": startDate?.toIso8601String(), // Match the request payload
-    //           "endDate": endDate?.toIso8601String(),
-    //         },
-    //         options: Options(
-    //           responseType: ResponseType.bytes, // For downloading binary data
-    //           headers: {
-    //             "accept": "*/*", // Header matching curl
-    //             "Content-Type": "application/json", // Header matching curl
-    //           },
-    //         ),
-    //         onReceiveProgress: (receivedBytes, totalBytes) {
-    //           if (totalBytes != -1) {
-    //             print("totalBytes != -1");
-    //           }
-    //         },
-    //       ).then((response) async {
-    //         final filePath = solvePath ?? "$downloadDirectory$fileName";
-    //         final file = File(filePath);
-    //         await file.writeAsBytes(response.data); // Save response bytes to the file
-    //         dev.log('File downloaded successfully at $filePath');
-    //       }).catchError((error) {
-    //         dev.log('Download error: $error'); // Log errors for debugging
-    //       });
-    //
-    //
-    //       if (showNotification) {
-    //         await AwesomeNotifications().dismiss(1);
-    //         await AwesomeNotifications().createNotification(
-    //           actionButtons: hideButtons
-    //               ? null
-    //               : [
-    //                   NotificationActionButton(
-    //                     enabled: !disabledOpenFileButton,
-    //                     color: Colors.green.shade900,
-    //                     key: "tbib_downloader_open_file",
-    //                     label: "Open File",
-    //                   ),
-    //                   NotificationActionButton(
-    //                     enabled: !disabledDeleteFileButton,
-    //                     key: "tbib_downloader_delete_file",
-    //                     isDangerousOption: true,
-    //                     color: Colors.red.shade900,
-    //                     label: "Delete File",
-    //                   ),
-    //                   NotificationActionButton(
-    //                     enabled: !disabledShareFileButton,
-    //                     key: "tbib_downloader_share_file",
-    //                     color: Colors.green.shade900,
-    //                     label: "Share File",
-    //                   ),
-    //                 ],
-    //           content: NotificationContent(
-    //             id: 1,
-    //             channelKey: 'download_completed_channel',
-    //             title: 'Download completed',
-    //             body: 'Download completed $fileName',
-    //             wakeUpScreen: true,
-    //             color: Colors.green,
-    //             payload: {
-    //               'path': solvePath ?? "$downloadDirectory$fileName",
-    //               'mime': lookupMimeType(downloadDirectory + fileName)
-    //             },
+    //             behavior: SnackBarBehavior.floating,
+    //             content: Text('Permission denied to access storage'),
     //           ),
     //         );
+    //         Future.delayed(const Duration(seconds: 2), () {
+    //           openAppSettings();
+    //         });
+    //         return null;
     //       }
-    //     } catch (e) {
-    //       dev.log('download error: $e');
     //     }
-    //     _downloadStarted = false;
-    //
-    //     return solvePath ?? "$downloadDirectory$fileName";
     //   }
-    //-------------------------
+    //
+    //   late String downloadDirectory;
+    //
+    //   if (_downloadStarted) {
+    //     dev.log('Download already started');
+    //     return null;
+    //   }
+    //   _downloadStarted = true;
+    //   if (Platform.isAndroid && !saveFileInDataApp) {
+    //     downloadDirectory =
+    //     "${await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOAD)}/";
+    //   } else {
+    //     if (saveFileInDataApp) {
+    //       downloadDirectory = "${(await getApplicationSupportDirectory()).path}/";
+    //     } else {
+    //       downloadDirectory =
+    //       "${(await getApplicationDocumentsDirectory()).path}/";
+    //     }
+    //   }
+    //   if (directoryName != null && Platform.isIOS) {
+    //     downloadDirectory = "$downloadDirectory$directoryName/";
+    //   }
+    //   if (Platform.isAndroid && directoryName != null) {
+    //     final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    //     if (deviceInfo.version.sdkInt > 30) {
+    //       downloadDirectory = "$downloadDirectory$directoryName/";
+    //     }
+    //   }
+    //
+    //   if (File(downloadDirectory).existsSync()) {
+    //     File(downloadDirectory).deleteSync(recursive: true);
+    //   }
+    //
+    //   await Directory(downloadDirectory).create(recursive: true);
+    //   if (Platform.isIOS && showNotification) {
+    //     await AwesomeNotifications().createNotification(
+    //       content: NotificationContent(
+    //           id: 1,
+    //           channelKey: 'download_channel',
+    //           title: 'Downloading',
+    //           body: 'Downloading $fileName',
+    //           wakeUpScreen: true,
+    //           locked: true),
+    //     );
+    //   }
+    //
+    //   DateTime startTime = DateTime.now();
+    //   DateTime notificationDisplayDate = DateTime.now();
+    //   DateTime endTime = DateTime.now().add(refreshNotificationProgress);
+    //   String? solvePath;
+    //   if (File('$downloadDirectory$fileName').existsSync()) {
+    //     solvePath = await getAvailableFilePath('$downloadDirectory$fileName');
+    //   }
+    //   bool showNewNotification = true;
+    //   try {
+    //     await _dio?.post(
+    //       url, // The URL
+    //       data: {
+    //         "startDate": startDate?.toIso8601String(), // Match the request payload
+    //         "endDate": endDate?.toIso8601String(),
+    //       },
+    //       options: Options(
+    //         responseType: ResponseType.bytes, // For downloading binary data
+    //         headers: {
+    //           "accept": "*/*", // Header matching curl
+    //           "Content-Type": "application/json", // Header matching curl
+    //         },
+    //       ),
+    //       onReceiveProgress: (receivedBytes, totalBytes) {
+    //         if (totalBytes != -1) {
+    //           print("totalBytes != -1");
+    //         }
+    //       },
+    //     ).then((response) async {
+    //       final filePath = solvePath ?? "$downloadDirectory$fileName";
+    //       final file = File(filePath);
+    //       await file.writeAsBytes(response.data); // Save response bytes to the file
+    //       dev.log('File downloaded successfully at $filePath');
+    //     }).catchError((error) {
+    //       dev.log('Download error: $error'); // Log errors for debugging
+    //     });
+    //
+    //
+    //     if (showNotification) {
+    //       await AwesomeNotifications().dismiss(1);
+    //       await AwesomeNotifications().createNotification(
+    //         actionButtons: hideButtons
+    //             ? null
+    //             : [
+    //           NotificationActionButton(
+    //             enabled: !disabledOpenFileButton,
+    //             color: Colors.green.shade900,
+    //             key: "tbib_downloader_open_file",
+    //             label: "Open File",
+    //           ),
+    //           NotificationActionButton(
+    //             enabled: !disabledDeleteFileButton,
+    //             key: "tbib_downloader_delete_file",
+    //             isDangerousOption: true,
+    //             color: Colors.red.shade900,
+    //             label: "Delete File",
+    //           ),
+    //           NotificationActionButton(
+    //             enabled: !disabledShareFileButton,
+    //             key: "tbib_downloader_share_file",
+    //             color: Colors.green.shade900,
+    //             label: "Share File",
+    //           ),
+    //         ],
+    //         content: NotificationContent(
+    //           id: 1,
+    //           channelKey: 'download_completed_channel',
+    //           title: 'Download completed',
+    //           body: 'Download completed $fileName',
+    //           wakeUpScreen: true,
+    //           color: Colors.green,
+    //           payload: {
+    //             'path': solvePath ?? "$downloadDirectory$fileName",
+    //             'mime': lookupMimeType(downloadDirectory + fileName)
+    //           },
+    //         ),
+    //       );
+    //     }
+    //   } catch (e) {
+    //     dev.log('download error: $e');
+    //   }
+    //   _downloadStarted = false;
+    //
+    //   return solvePath ?? "$downloadDirectory$fileName";
+    // }
     var path = await TBIBDownloader().downloadFile(
       context: context,
       url:
       '${ServiceManager.baseURL}Items/DownloadReport',
+      startDate: startDate,
+      endDate: endDate,
+      // queryParameters: {
+      //   'startDate': startDate.toIso8601String(),
+      //   'endDate': endDate.toIso8601String(),
+      // },
       receiveBytesAsMB: true,
       fileName: 'report.csv',
-      queryParameters: {
-        'startDate': startDate.toIso8601String(),
-        'endDate': endDate.toIso8601String(),
-      },
       // directoryName: 'data',
       onReceiveProgress: ({int? receivedBytes, int? totalBytes}) {
         if (!context.mounted) {

@@ -21,7 +21,7 @@ class ServiceManager {
   // static String baseURL = 'http://51.79.229.83:8080/API/';
 
   ///PRODUCTION URL
-  static String baseURL = 'http://51.79.229.83:8081/Live/API/';
+  static String baseURL = 'http://51.79.229.83:8080/Live/API/';
 
   ///LIVE
   static Map<String, String>? header = {

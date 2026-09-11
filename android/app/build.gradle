@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 android {
     namespace "com.lrg.lrg"
     compileSdkVersion 36
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,9 +57,9 @@ flutter {
     source '../..'
 }
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.3.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.3.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.20"
 
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation "androidx.multidex:multidex:2.0.1"

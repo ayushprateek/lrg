@@ -24,7 +24,8 @@ dependencies:
   path_provider: ^2.1.5
   csv: ^6.0.0
   #  gallery_saver: ^2.3.2
-  tbib_downloader: ^2.6.1
+  # 2.6.1 is broken upstream; the published fix is patched locally for AGP 9.
+  tbib_downloader: 2.6.0-fix.1
   #  path: ^1.8.2
   #  cupertino_icons: ^1.0.5
   #  material_design_icons_flutter: ^6.0.7096
@@ -77,6 +78,10 @@ dev_dependencies:
   pedantic: ^1.11.1
   build_runner: ^2.1.11
   flutter_launcher_icons: ^0.13.1
+
+dependency_overrides:
+  tbib_downloader:
+    path: third_party/tbib_downloader
 
 flutter_launcher_icons:
   android: "launcher_icon"

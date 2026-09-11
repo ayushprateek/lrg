@@ -835,11 +835,10 @@ packages:
   tbib_downloader:
     dependency: "direct main"
     description:
-      name: tbib_downloader
-      sha256: "0febc4c3091c8becdf6014f268b7ac27f5d701b32e292022f11cf45479be8815"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.1"
+      path: "third_party/tbib_downloader"
+      relative: true
+    source: path
+    version: "2.6.0-fix.1"
   term_glyph:
     dependency: transitive
     description:
