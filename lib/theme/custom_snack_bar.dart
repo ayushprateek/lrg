@@ -1,6 +1,6 @@
 import 'package:miesp/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:miesp/ui/components/elements_snackbar.dart';
 
 class CustomSnackBar {
   static void snackBar(
@@ -9,14 +9,18 @@ class CustomSnackBar {
     Color? textColor,
     int? duration,
   }) {
-    Get.showSnackbar(GetSnackBar(
-      messageText: Text(
-        text,
-        style: TextStyle(color: textColor ?? appPrimary),
-      ),
-      backgroundColor: backgroundColor ?? appAccent,
-      duration: Duration(milliseconds: duration ?? 1500),
-    ));
+    appScaffoldMessengerKey.currentState
+      ?..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            text,
+            style: TextStyle(color: textColor ?? appPrimary),
+          ),
+          backgroundColor: backgroundColor ?? appAccent,
+          duration: Duration(milliseconds: duration ?? 1500),
+        ),
+      );
   }
 
   static void errorSnackBar(String text) {

@@ -31,13 +31,13 @@ class LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
 
-  // TextEditingController userEmail =
-  //     TextEditingController(text: 'ashfaque@lulurayyan.com');
-  // TextEditingController password = TextEditingController(text: 'User@123');
-  //
+  TextEditingController userEmail =
+      TextEditingController(text: 'ashfaque@lulurayyan.com');
+  TextEditingController password = TextEditingController(text: 'User@123');
 
-  TextEditingController userEmail = TextEditingController();
-  TextEditingController password = TextEditingController();
+  //
+  // TextEditingController userEmail = TextEditingController();
+  // TextEditingController password = TextEditingController();
 
   _onBackButtonPressed() {
     showBackPressedWarning(
